@@ -1,5 +1,6 @@
 package br.com.ipet.Models;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.Transient;
 
@@ -8,10 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -49,11 +47,11 @@ public class User {
     @Size(max = 250)
     @Email
     private String email;
-//    @NotBlank
+    //    @NotBlank
 //    @NotNull
 //    @Size(min = 3, max = 68)
     private String firstName;
-//    @NotNull
+    //    @NotNull
 //    @Size(min = 1, max = 150)
     private String lastName;
     @Size(max = 14)
@@ -70,10 +68,13 @@ public class User {
     @Transient
     private List<Address> address = new ArrayList<>();
 
-//    @Size(min = 1,max = 3)
+    //    @Size(min = 1,max = 3)
     private String ddd;
     @Size(max = 15)
     private String phoneNumber;
+
+    @CreationTimestamp
+    private Date joinedDate;
 
     public User() {
     }
@@ -184,5 +185,9 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Date getJoinedDate() {
+        return joinedDate;
     }
 }

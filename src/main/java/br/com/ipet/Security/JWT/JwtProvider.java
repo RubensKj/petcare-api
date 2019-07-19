@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
@@ -38,6 +39,15 @@ public class JwtProvider {
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
+    }
+
+    public String getJwt(HttpServletRequest req) {
+        String auth = req.getHeader("Authorization");
+
+        if (auth != null && auth.startsWith("Bearer ")) {
+            return auth.replace("Bearer ", "");
+        }
+        return null;
     }
 
     public boolean validateJwtToken(String authToken) {
