@@ -3,11 +3,14 @@ package br.com.ipet.Controllers;
 import br.com.ipet.Models.User;
 import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Repository.UserRepository;
+import br.com.ipet.Services.UserAuthPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -20,6 +23,20 @@ public class UserController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @PostMapping("/finishSignUp")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<User> editUser(@Valid @RequestBody User user, Authentication authentication) {
+        UserAuthPrincipal userAuth = (UserAuthPrincipal) authentication.getPrincipal();
+        User userLogged = userRepository.findByUsername(userAuth.getUsername()).get();
+
+        userLogged.setFirstName(user.getFirstName());
+        userLogged.setLastName(user.getLastName());
+        userLogged.setCpf(user.getCpf());
+
+        userRepository.save(userLogged);
+        return ResponseEntity.ok(userLogged);
+    }
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

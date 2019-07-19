@@ -49,19 +49,18 @@ public class User {
     @Size(max = 250)
     @Email
     private String email;
-    @NotBlank
-    @NotNull
-    @Size(min = 3, max = 68)
+//    @NotBlank
+//    @NotNull
+//    @Size(min = 3, max = 68)
     private String firstName;
-    @NotNull
-    @Size(min = 1, max = 150)
+//    @NotNull
+//    @Size(min = 1, max = 150)
     private String lastName;
     @Size(max = 14)
-    @NotNull
+//    @NotNull
     private String cpf;
 
     @Size(max = 1000)
-    @NotNull
     private String avatar;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -71,7 +70,7 @@ public class User {
     @Transient
     private List<Address> address = new ArrayList<>();
 
-    @Size(min = 1,max = 3)
+//    @Size(min = 1,max = 3)
     private String ddd;
     @Size(max = 15)
     private String phoneNumber;

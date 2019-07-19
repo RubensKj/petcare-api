@@ -25,12 +25,10 @@ public class UserRegisterForm {
     private String email;
     private Set<String> role;
 
-    @NotBlank
-    @Size(min = 3, max = 68)
+    @Size(max = 68)
     private String firstName;
 
-    @NotBlank
-    @Size(min = 1, max = 150)
+    @Size(max = 150)
     private String lastName;
     private String cpf;
     private List<Address> address = new ArrayList<>();
