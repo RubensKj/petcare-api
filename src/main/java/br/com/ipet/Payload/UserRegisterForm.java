@@ -12,36 +12,24 @@ import java.util.Set;
 public class UserRegisterForm {
 
     @NotBlank
-    @Size(min = 3, max = 50)
-    private String username;
+    @Size(max = 60)
+    @Email
+    private String email;
 
     @NotBlank
     @Size(min = 3, max = 40)
     private String password;
 
-    @NotBlank
-    @Size(max = 60)
-    @Email
-    private String email;
     private Set<String> role;
 
-    @Size(max = 68)
-    private String firstName;
+    @Size(max = 225)
+    private String completeName;
 
-    @Size(max = 150)
-    private String lastName;
     private String cpf;
     private List<Address> address = new ArrayList<>();
     private String ddd;
     private String phoneNumber;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    private String avatar;
 
     public String getPassword() {
         return password;
@@ -67,20 +55,12 @@ public class UserRegisterForm {
         this.role = role;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getCompleteName() {
+        return completeName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCompleteName(String completeName) {
+        this.completeName = completeName;
     }
 
     public String getCpf() {
@@ -113,5 +93,13 @@ public class UserRegisterForm {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

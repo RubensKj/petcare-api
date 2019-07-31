@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers;
+package br.com.ipet.Controllers.User.UserAuthentication;
 
 import br.com.ipet.Models.Address;
 import br.com.ipet.Models.Role;
@@ -8,9 +8,9 @@ import br.com.ipet.Payload.UserForm;
 import br.com.ipet.Payload.UserRegisterForm;
 import br.com.ipet.Repository.AddressRepository;
 import br.com.ipet.Repository.RoleRepository;
-import br.com.ipet.Repository.UserRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Security.JWT.JwtResponse;
+import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,16 +32,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/auth")
-public class AuthRestAPI {
+public class UserAuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -52,12 +54,12 @@ public class AuthRestAPI {
     @Autowired
     private JwtProvider jwtProvider;
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserForm loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
+                        loginRequest.getEmail(),
                         loginRequest.getPassword()
                 )
         );
@@ -69,9 +71,10 @@ public class AuthRestAPI {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> UnauthenticateUser(HttpServletRequest req) {
+    public ResponseEntity<?> unauthenticateUser(HttpServletRequest req) {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
         try {
+            req.getHeader("Authorization").replace("", "");
             req.logout();
         } catch (ServletException e) {
             return ResponseEntity.ok("false");
@@ -79,22 +82,26 @@ public class AuthRestAPI {
         return ResponseEntity.ok("true");
     }
 
+    @PostMapping("/validate-user")
+    public ResponseEntity<String> validateUser(@Valid @RequestBody UserRegisterForm user) {
+        if (userService.existsByEmail(user.getEmail())) {
+            return new ResponseEntity<>("Email já está sendo usado!",
+                    HttpStatus.BAD_REQUEST);
+        }
+        return null;
+    }
+
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegisterForm signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>("Fail -> Username is already taken!",
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>("Fail -> Email is already in use!",
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
+            return new ResponseEntity<>("Email já está sendo usado!",
                     HttpStatus.BAD_REQUEST);
         }
 
         // Creating user's account
-        User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getEmail(),
-                signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getCpf(), signUpRequest.getDdd(), signUpRequest.getPhoneNumber(), signUpRequest.getAddress());
+        User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getCompleteName(), signUpRequest.getCpf(), signUpRequest.getDdd(), signUpRequest.getPhoneNumber(), signUpRequest.getAvatar());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -104,19 +111,19 @@ public class AuthRestAPI {
                 switch (role) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                                .orElseThrow(() -> new RuntimeException("ADMIN_ROLE não foi encontrada. (" + RoleName.ROLE_ADMIN + ")"));
                         roles.add(adminRole);
 
                         break;
                     default:
                         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                                .orElseThrow(() -> new RuntimeException("USER_ROLE não foi encontrada. (" + RoleName.ROLE_USER + ")"));
                         roles.add(userRole);
                 }
             });
         } catch (NullPointerException e) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                    .orElseThrow(() -> new RuntimeException("USER_ROLE não foi encontrada. (" + RoleName.ROLE_USER + ")"));
             roles.add(userRole);
         }
         user.setRoles(roles);
@@ -130,8 +137,8 @@ public class AuthRestAPI {
         });
         user.setAddress(addressUser);
 
-        userRepository.save(user);
+        userService.save(user);
 
-        return ResponseEntity.ok().body("User registered successfully!");
+        return ResponseEntity.ok().body("Usuário foi registrado com sucesso!");
     }
 }

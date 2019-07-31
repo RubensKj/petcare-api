@@ -1,6 +1,11 @@
 package br.com.ipet.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.Transient;
 
@@ -9,27 +14,33 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@DynamicUpdate
+@DynamicInsert
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "username"
-        }),
         @UniqueConstraint(columnNames = {
                 "email"
         })
 })
+@Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotBlank
+    @NaturalId
     @NotNull
-    @Size(min = 3, max = 50)
-    private String username;
+    @NotBlank
+    @Size(max = 250)
+    @Email
+    @Column(columnDefinition = "varchar(250) default 'Não informado!'")
+    private String email;
+
     @NotBlank
     @NotNull
     @Size(min = 3, max = 100)
@@ -41,70 +52,57 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @NaturalId
-    @NotNull
-    @NotBlank
-    @Size(max = 250)
-    @Email
-    private String email;
-    //    @NotBlank
-//    @NotNull
-//    @Size(min = 3, max = 68)
-    private String firstName;
-    //    @NotNull
-//    @Size(min = 1, max = 150)
-    private String lastName;
+
+    @Size(min = 3, max = 225)
+    @Column(columnDefinition = "varchar(68) default 'Não informado!'")
+    private String completeName;
+
     @Size(max = 14)
-//    @NotNull
+    @Column(columnDefinition = "varchar(15) default 'Não informado!'")
     private String cpf;
 
-    @Size(max = 1000)
-    private String avatar;
+    @Size(max = 3)
+    @Column(columnDefinition = "varchar(20) default 'Não informado!'")
+    private String ddd;
+
+    @Size(max = 15)
+    @Column(columnDefinition = "varchar(20) default 'Não informado!'")
+    private String phoneNumber;
+
+//    @JoinTable(name = "user_addresses",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "address_id"))
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_addresses",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id"))
     @Transient
     private List<Address> address = new ArrayList<>();
 
-    //    @Size(min = 1,max = 3)
-    private String ddd;
-    @Size(max = 15)
-    private String phoneNumber;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> favorites = new HashSet<>();
+
+    @Size(max = 1000)
+    @Column(columnDefinition = "varchar(1000) default 'https://decoradornet.com.br/upload/images/default-avatar.jpg'")
+    private String avatar;
 
     @CreationTimestamp
-    private Date joinedDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private LocalDateTime joinedDate;
 
     public User() {
     }
 
-    public User(String username, String password, String email, String firstName, String lastName, String cpf, String ddd, String phoneNumber, List<Address> address) {
-        this.username = username;
-        this.password = password;
+    public User(String email, String password, String completeName, String cpf, String ddd, String phoneNumber, String avatar) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.password = password;
+        this.completeName = completeName;
         this.cpf = cpf;
         this.ddd = ddd;
         this.phoneNumber = phoneNumber;
-        this.address = address;
+        this.avatar = avatar;
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -127,24 +125,12 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getCompleteName() {
+        return completeName;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCompleteName(String completeName) {
+        this.completeName = completeName;
     }
 
     public String getCpf() {
@@ -155,39 +141,15 @@ public class User {
         this.cpf = cpf;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public List<Address> getAddress() {
-        return address;
     }
 
     public void setAddress(List<Address> address) {
         this.address = address;
     }
 
-    public String getDdd() {
-        return ddd;
-    }
-
-    public void setDdd(String ddd) {
-        this.ddd = ddd;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Date getJoinedDate() {
-        return joinedDate;
+    public Set<Long> getFavorites() {
+        return favorites;
     }
 }

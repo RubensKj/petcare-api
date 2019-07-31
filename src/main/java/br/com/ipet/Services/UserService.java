@@ -5,6 +5,8 @@ import br.com.ipet.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -19,12 +21,15 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username).get();
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).get();
     }
 
     public User findById(Long longID) {
         return userRepository.findById(longID).get();
     }
 
+    public List<User> findAll() { return userRepository.findAll(); }
+
+    public boolean existsByEmail(String email) { return userRepository.existsByEmail(email); }
 }

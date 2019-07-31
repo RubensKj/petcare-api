@@ -1,9 +1,9 @@
 package br.com.ipet.Controllers;
 
 import br.com.ipet.Models.User;
-import br.com.ipet.Repository.UserRepository;
 import br.com.ipet.Services.FileStorageService;
 import br.com.ipet.Services.UserAuthPrincipal;
+import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +21,7 @@ import java.net.URI;
 public class FileController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -36,13 +36,11 @@ public class FileController {
         String urlImage = contextUrl + "images/" + resource.getFilename();
 
         UserAuthPrincipal user = (UserAuthPrincipal) authentication.getPrincipal();
-        User user1 = userRepository.findByUsername(user.getUsername()).get();
+        User user1 = userService.findByEmail(user.getUsername());
 
         user1.setAvatar(urlImage);
 
-        userRepository.save(user1);
-
-//        System.out.println(urlImage);
+        userService.save(user1);
 
         return ResponseEntity.ok().body(urlImage);
     }
