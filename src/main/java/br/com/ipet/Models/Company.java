@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -18,7 +19,7 @@ import java.util.Set;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
@@ -49,6 +50,9 @@ public class Company {
     @org.springframework.data.annotation.Transient
     private Set<Address> addresses = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Map<String, Boolean> userFavorites;
+
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime creationDate;
@@ -70,5 +74,9 @@ public class Company {
 
     public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    public Map<String, Boolean> getUserFavorites() {
+        return userFavorites;
     }
 }

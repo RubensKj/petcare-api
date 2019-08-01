@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
+@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000" })
 @RestController
 @RequestMapping("/api")
 public class CompanyCrudController {

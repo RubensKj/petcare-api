@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000" })
 @RestController
 @RequestMapping("/api")
 public class UserActionsController {
@@ -39,6 +39,7 @@ public class UserActionsController {
             User user = userService.findByEmail(emailUserLogged);
 
             try {
+                company.getUserFavorites().put(user.getEmail(), true);
                 user.getFavorites().add(company.getId());
             } catch (Exception e) {
                 return ResponseEntity.ok(company);
@@ -64,6 +65,7 @@ public class UserActionsController {
 
             try {
                 user.getFavorites().remove(company.getId());
+                company.getUserFavorites().remove(user.getEmail());
             } catch (Exception e) {
                 return ResponseEntity.ok(company);
             }
