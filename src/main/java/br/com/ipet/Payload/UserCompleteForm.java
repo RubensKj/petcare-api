@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class UserRegisterForm {
+public class UserCompleteForm {
 
     @NotBlank
     @Size(max = 60)

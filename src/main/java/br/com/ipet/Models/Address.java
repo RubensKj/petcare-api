@@ -36,4 +36,8 @@ public class Address {
     private String latitude;
     private String longitude;
 
+
+    public int getId() {
+        return id;
+    }
 }

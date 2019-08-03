@@ -26,7 +26,7 @@ public class PageUserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<User> getUserInformationToProfile(HttpServletRequest req) {
         String jwtToken = jwtProvider.getJwt(req);
-        String usernameUserLogged = jwtProvider.getUserNameFromJwtToken(jwtToken);
+        String usernameUserLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
         User user = userService.findByEmail(usernameUserLogged);
         return ResponseEntity.ok(user);
     }

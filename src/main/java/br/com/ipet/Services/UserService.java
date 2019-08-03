@@ -32,4 +32,6 @@ public class UserService {
     public List<User> findAll() { return userRepository.findAll(); }
 
     public boolean existsByEmail(String email) { return userRepository.existsByEmail(email); }
+
+    public boolean existsByCpf(String cpf) { return userRepository.existsByCpf(cpf); }
 }

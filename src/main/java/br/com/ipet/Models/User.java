@@ -23,6 +23,9 @@ import java.util.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "email"
+        }),
+        @UniqueConstraint(columnNames = {
+                "cpf"
         })
 })
 @Getter
@@ -151,5 +154,25 @@ public class User {
 
     public Set<Long> getFavorites() {
         return favorites;
+    }
+
+    public String getDdd() {
+        return ddd;
+    }
+
+    public void setDdd(String ddd) {
+        this.ddd = ddd;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 }

@@ -5,7 +5,7 @@ import br.com.ipet.Models.Role;
 import br.com.ipet.Models.RoleName;
 import br.com.ipet.Models.User;
 import br.com.ipet.Payload.UserForm;
-import br.com.ipet.Payload.UserRegisterForm;
+import br.com.ipet.Payload.UserCompleteForm;
 import br.com.ipet.Repository.AddressRepository;
 import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
@@ -14,6 +14,7 @@ import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000"})
 @RestController
 @RequestMapping("/api/auth")
 public class UserAuthController {
@@ -69,11 +70,14 @@ public class UserAuthController {
     }
 
     @PostMapping("/logout")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> unauthenticateUser(HttpServletRequest req) {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
         try {
-            req.getHeader("Authorization").replace("", "");
-            req.logout();
+            if (req.getHeader("Authorization") != null) {
+                req.getHeader("Authorization").replace("", "");
+                req.logout();
+            }
         } catch (ServletException e) {
             return ResponseEntity.ok("false");
         }
@@ -81,7 +85,7 @@ public class UserAuthController {
     }
 
     @PostMapping("/validate-user")
-    public ResponseEntity<String> validateUser(@Valid @RequestBody UserRegisterForm user) {
+    public ResponseEntity<String> validateUser(@Valid @RequestBody UserCompleteForm user) {
         if (userService.existsByEmail(user.getEmail())) {
             return new ResponseEntity<>("Email já está sendo usado!",
                     HttpStatus.BAD_REQUEST);
@@ -91,7 +95,7 @@ public class UserAuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegisterForm signUpRequest) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserCompleteForm signUpRequest) {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>("Email já está sendo usado!",
                     HttpStatus.BAD_REQUEST);
