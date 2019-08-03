@@ -38,6 +38,22 @@ public class UserActionsController {
         return ResponseEntity.ok(userValidated);
     }
 
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable long id) {
+        User user = userService.findById(id);
+        userService.remove(user);
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<Boolean> deleteUserLogged(HttpServletRequest req) {
+        User user = UserHelper.getUserLogged(req, userService, jwtProvider);
+        userService.remove(user);
+        return ResponseEntity.ok(true);
+    }
+
     @PostMapping("/favorite/{id}")
     @Transactional
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

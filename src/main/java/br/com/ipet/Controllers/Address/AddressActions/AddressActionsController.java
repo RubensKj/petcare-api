@@ -1,12 +1,10 @@
 package br.com.ipet.Controllers.Address.AddressActions;
 
 import br.com.ipet.Models.Address;
-import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.AddressService;
-import br.com.ipet.Services.CompanyService;
-import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,30 +15,15 @@ import javax.validation.Valid;
 public class AddressActionsController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
     private AddressService addressService;
 
-    @Autowired
-    private JwtProvider jwtProvider;
-
-    @PostMapping("/companies/address")
-    public ResponseEntity<Address> changeAddressCompany(@Valid @RequestBody Address address) {
+    @PostMapping("/address/edit")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<Address> changeAddress(@Valid @RequestBody Address address) {
         if(addressService.existsById(address.getId())) {
             addressService.save(address);
         }
         return ResponseEntity.ok(address);
     }
 
-    @PostMapping("/users/address")
-    public ResponseEntity<Address> changeAddressUser(@Valid @RequestBody Address address) {
-        if(addressService.existsById(address.getId())) {
-            addressService.save(address);
-        }
-        return ResponseEntity.ok(address);
-    }
 }
