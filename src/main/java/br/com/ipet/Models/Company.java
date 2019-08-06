@@ -23,6 +23,10 @@ public class Company {
     private long id;
 
     @NotNull
+    @OneToOne
+    private User owner;
+
+    @NotNull
     @Size(max = 18)
     private String cnpj;
 

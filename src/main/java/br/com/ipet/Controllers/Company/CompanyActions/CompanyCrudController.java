@@ -8,6 +8,7 @@ import br.com.ipet.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,7 +49,8 @@ public class CompanyCrudController {
     }
 
     @PostMapping("/remove-petshop/{id}")
-    public ResponseEntity<String> removeByCnpj(@PathVariable long id) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<String> removeById(@PathVariable long id) {
         companyService.removeById(id);
         return ResponseEntity.ok("Empresa deletada com sucesso!");
     }

@@ -23,7 +23,7 @@ public class PageUserController {
     private JwtProvider jwtProvider;
 
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<User> getUserInformationToProfile(HttpServletRequest req) {
         String jwtToken = jwtProvider.getJwt(req);
         String usernameUserLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
@@ -32,19 +32,19 @@ public class PageUserController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
     @GetMapping("/api/test/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public String adminAccess() {
         return ">>> Admin Contents";
     }

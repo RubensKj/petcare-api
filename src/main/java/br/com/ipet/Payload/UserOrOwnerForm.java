@@ -3,7 +3,7 @@ package br.com.ipet.Payload;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UserForm {
+public class UserOrOwnerForm {
     @NotBlank
     @Size(min=3, max = 60)
     private String email;
