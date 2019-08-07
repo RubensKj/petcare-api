@@ -6,7 +6,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,8 +16,8 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthEntryPoint.class);
 
     @Override
-    public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) throws IOException, ServletException {
-        logger.error("Unauthorized error. - Message: ", authException);
+    public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) throws IOException {
+        logger.error("Access denied, please log in on the application. Error: ", authException);
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error - Unauthorized");
     }
 }

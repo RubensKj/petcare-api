@@ -24,7 +24,7 @@ public class Company {
 
     @NotNull
     @OneToOne
-    private User owner;
+    private Owner owner;
 
     @NotNull
     @Size(max = 18)
@@ -63,7 +63,8 @@ public class Company {
 
     public Company() {}
 
-    public Company(@NotNull @Size(max = 14) String cnpj, @NotBlank @Size(min = 3, max = 50) String companyName, @Size(max = 350) String description, @Size(max = 10) String status, String avatar, @DecimalMax("5.0") @DecimalMin("0.0") double rate) {
+    public Company(@NotNull Owner owner, @NotNull @Size(max = 18) String cnpj, @NotBlank @Size(max = 75) String companyName, @Size(max = 350) String description, @Size(max = 10) String status, @Size(max = 1000) String avatar, @DecimalMax("5.0") @DecimalMin("0.0") double rate) {
+        this.owner = owner;
         this.cnpj = cnpj;
         this.companyName = companyName;
         this.description = description;
@@ -82,5 +83,9 @@ public class Company {
 
     public Map<String, Boolean> getUserFavorites() {
         return userFavorites;
+    }
+
+    public Owner getOwner() {
+        return owner;
     }
 }

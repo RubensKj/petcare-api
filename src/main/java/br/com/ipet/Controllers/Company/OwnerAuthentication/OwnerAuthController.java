@@ -63,7 +63,7 @@ public class OwnerAuthController {
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<?> unauthenticateOwner(HttpServletRequest req) {
         return logoutMethod(req);
     }
@@ -87,9 +87,13 @@ public class OwnerAuthController {
                 switch (role) {
                     case "user":
                         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("OWNER_ROLE não foi encontrada. (" + RoleName.ROLE_USER + ")"));
+                                .orElseThrow(() -> new RuntimeException("ROLE_USER não foi encontrada. (" + RoleName.ROLE_USER + ")"));
                         roles.add(userRole);
-
+                        break;
+                    case "owner":
+                        Role ownerRole = roleRepository.findByName(RoleName.ROLE_OWNER)
+                                .orElseThrow(() -> new RuntimeException("OWNER_ROLE não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
+                        roles.add(ownerRole);
                         break;
                     default:
                         Role userOwner = roleRepository.findByName(RoleName.ROLE_OWNER)

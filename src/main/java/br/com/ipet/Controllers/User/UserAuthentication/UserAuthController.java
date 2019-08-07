@@ -93,6 +93,11 @@ public class UserAuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
+        if (userService.existsByCpf(signUpRequest.getCpf())) {
+            return new ResponseEntity<>("CPF já está sendo usado!",
+                    HttpStatus.BAD_REQUEST);
+        }
+
         // Creating user's account
         User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getCompleteName(), signUpRequest.getCpf(), signUpRequest.getDdd(), signUpRequest.getPhoneNumber(), signUpRequest.getAvatar());

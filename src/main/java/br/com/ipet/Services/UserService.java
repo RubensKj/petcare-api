@@ -29,9 +29,15 @@ public class UserService {
         return userRepository.findById(longID).get();
     }
 
-    public List<User> findAll() { return userRepository.findAll(); }
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
-    public boolean existsByEmail(String email) { return userRepository.existsByEmail(email); }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
-    public boolean existsByCpf(String cpf) { return userRepository.existsByCpf(cpf); }
+    public boolean existsByCpf(String cpf) {
+        return userRepository.existsByCpf(cpf);
+    }
 }

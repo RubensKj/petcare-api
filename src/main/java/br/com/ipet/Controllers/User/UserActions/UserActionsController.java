@@ -30,7 +30,7 @@ public class UserActionsController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/edit")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<User> editUser(@RequestBody UserCompleteForm userJSON, HttpServletRequest req) {
         User user = UserHelper.getUserLogged(req, userService, jwtProvider);
         User userValidated = UserHelper.updateValidation(user, userJSON);
@@ -47,7 +47,7 @@ public class UserActionsController {
     }
 
     @PostMapping("/delete")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<Boolean> deleteUserLogged(HttpServletRequest req) {
         User user = UserHelper.getUserLogged(req, userService, jwtProvider);
         userService.remove(user);
