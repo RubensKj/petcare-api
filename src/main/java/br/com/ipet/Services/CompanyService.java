@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class CompanyService {
@@ -23,14 +22,14 @@ public class CompanyService {
     }
 
     public Company findById(Long longID) {
-        try {
-            return companyRepository.findById(longID).get();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
+        return companyRepository.findById(longID).get();
     }
 
-    public List<Company> findAll() { return companyRepository.findAll(); }
+    public List<Company> findAll() {
+        return companyRepository.findAll();
+    }
 
-    public boolean existsByCnpj(String cnpj) { return companyRepository.existsByCnpj(cnpj); }
+    public boolean existsByCnpj(String cnpj) {
+        return companyRepository.existsByCnpj(cnpj);
+    }
 }

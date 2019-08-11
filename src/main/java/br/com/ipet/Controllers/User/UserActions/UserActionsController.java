@@ -55,40 +55,45 @@ public class UserActionsController {
     }
 
     @PostMapping("/favorite/{id}")
-    @Transactional
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<Company> addFavorite(@PathVariable Long id, HttpServletRequest req) {
-        Company company = companyService.findById(id);
-        User user = UserHelper.getUserLogged(req, userService, jwtProvider);
-
+    public ResponseEntity<Company> addFavorite(HttpServletRequest req, @PathVariable Long id) {
         try {
-            if (user != null) {
+            Company company = companyService.findById(id);
+            User user = UserHelper.getUserLogged(req, userService, jwtProvider);
+
+            if (user != null && company != null) {
                 user.getFavorites().add(company.getId());
-                company.getUserFavorites().put(user.getEmail(), true);
+                company.getUserFavorites().add(user.getId());
+                companyService.save(company);
+                userService.save(user);
+                return ResponseEntity.ok(company);
+            } else {
+                return ResponseEntity.ok(null);
             }
         } catch (Exception e) {
-            return ResponseEntity.ok(company);
+            return ResponseEntity.ok(null);
         }
-
-        return ResponseEntity.ok(company);
     }
 
     @PostMapping("/removeFavorite/{id}")
     @Transactional
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Company> removeFavorite(@PathVariable Long id, HttpServletRequest req) {
-        Company company = companyService.findById(id);
-        User user = UserHelper.getUserLogged(req, userService, jwtProvider);
-
         try {
-            if (user != null) {
+            Company company = companyService.findById(id);
+            User user = UserHelper.getUserLogged(req, userService, jwtProvider);
+
+            if (user != null && company != null) {
                 user.getFavorites().remove(company.getId());
-                company.getUserFavorites().remove(user.getEmail());
+                company.getUserFavorites().remove(user.getId());
+                companyService.save(company);
+                userService.save(user);
+                return ResponseEntity.ok(company);
+            } else {
+                return ResponseEntity.ok(null);
             }
         } catch (Exception e) {
-            return ResponseEntity.ok(company);
+            return ResponseEntity.ok(null);
         }
-
-        return ResponseEntity.ok(company);
     }
 }

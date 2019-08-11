@@ -1,7 +1,10 @@
 package br.com.ipet.Controllers.User.JsonToPages;
 
+import br.com.ipet.Helpers.UserHelper;
+import br.com.ipet.Models.Company;
 import br.com.ipet.Models.User;
 import br.com.ipet.Security.JWT.JwtProvider;
+import br.com.ipet.Services.CompanyService;
 import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000" })
@@ -18,6 +22,9 @@ public class PageUserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -41,6 +48,21 @@ public class PageUserController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @GetMapping("/user/favorites")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<List<Company>> getFavoritesFromUser(HttpServletRequest req) {
+        User user = UserHelper.getUserLogged(req, userService, jwtProvider);
+        if(user != null) {
+            List<Company> companies = new ArrayList<>();
+            user.getFavorites().forEach(id -> {
+                Company company = companyService.findById(id);
+                companies.add(company);
+            });
+            return ResponseEntity.ok(companies);
+        }
+        return null;
     }
 
     @GetMapping("/api/test/admin")

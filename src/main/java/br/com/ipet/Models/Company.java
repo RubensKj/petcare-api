@@ -10,7 +10,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -20,7 +19,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @OneToOne
@@ -55,7 +54,7 @@ public class Company {
     private Set<Address> addresses = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Map<String, Boolean> userFavorites;
+    private Set<Long> userFavorites;
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -73,7 +72,7 @@ public class Company {
         this.rate = rate;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -81,7 +80,7 @@ public class Company {
         this.addresses = addresses;
     }
 
-    public Map<String, Boolean> getUserFavorites() {
+    public Set<Long> getUserFavorites() {
         return userFavorites;
     }
 
