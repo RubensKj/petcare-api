@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers;
+package br.com.ipet.Controllers.File;
 
 import br.com.ipet.Models.User;
 import br.com.ipet.Services.FileStorageService;

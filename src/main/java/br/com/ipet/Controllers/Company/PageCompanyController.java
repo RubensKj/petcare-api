@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers.Company.JsonToPages;
+package br.com.ipet.Controllers.Company;
 
 import br.com.ipet.Models.Company;
 import br.com.ipet.Services.CompanyService;
@@ -19,6 +19,11 @@ public class PageCompanyController {
     @GetMapping("/companies")
     public ResponseEntity<List<Company>> getAllCompanies() {
         return ResponseEntity.ok(companyService.findAll());
+    }
+
+    @GetMapping("/companies-rate")
+    public ResponseEntity<List<Company>> getCompaniesWithBetterRate() {
+        return ResponseEntity.ok(companyService.findByBetterRate());
     }
 
     @GetMapping("/companies/{id}")

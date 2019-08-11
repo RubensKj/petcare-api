@@ -1,10 +1,12 @@
-package br.com.ipet.Controllers.Company.OwnerAuthentication;
+package br.com.ipet.Controllers.User;
 
+import br.com.ipet.Models.Address;
 import br.com.ipet.Models.Role;
 import br.com.ipet.Models.RoleName;
 import br.com.ipet.Models.User;
 import br.com.ipet.Payload.UserCompleteForm;
 import br.com.ipet.Payload.UserOrOwnerForm;
+import br.com.ipet.Repository.AddressRepository;
 import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Security.JWT.JwtResponse;
@@ -22,15 +24,17 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
 
 @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000"})
 @RestController
-@RequestMapping("/api/owner")
-public class OwnerAuthController {
+@RequestMapping("/api/auth")
+public class UserAuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -42,6 +46,9 @@ public class OwnerAuthController {
     private RoleRepository roleRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
     private PasswordEncoder encoder;
 
     @Autowired
@@ -49,6 +56,7 @@ public class OwnerAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserOrOwnerForm loginRequest) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -63,20 +71,35 @@ public class OwnerAuthController {
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
-    public ResponseEntity<?> unauthenticateOwner(HttpServletRequest req) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> unauthenticateUser(HttpServletRequest req) {
         return logoutMethod(req);
     }
+
+    @PostMapping("/validate-user")
+    public ResponseEntity<String> validateUser(@Valid @RequestBody UserCompleteForm user) {
+        if (userService.existsByEmail(user.getEmail())) {
+            return new ResponseEntity<>("Email já está sendo usado!",
+                    HttpStatus.BAD_REQUEST);
+        }
+        return null;
+    }
+
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserCompleteForm signUpRequest) {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>("Email já está sendo usado, ou você já é um usuário, ou seja, basta logar e clicar no botão 'Criar Empresa'!",
+            return new ResponseEntity<>("Email já está sendo usado!",
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Creating owner's account
-        User owner = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
+        if (userService.existsByCpf(signUpRequest.getCpf())) {
+            return new ResponseEntity<>("CPF já está sendo usado!",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Creating user's account
+        User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getCompleteName(), signUpRequest.getCpf(), signUpRequest.getDdd(), signUpRequest.getPhoneNumber(), signUpRequest.getAvatar());
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -85,31 +108,36 @@ public class OwnerAuthController {
         try {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "user":
-                        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("ROLE_USER não foi encontrada. (" + RoleName.ROLE_USER + ")"));
-                        roles.add(userRole);
-                        break;
-                    case "owner":
-                        Role ownerRole = roleRepository.findByName(RoleName.ROLE_OWNER)
-                                .orElseThrow(() -> new RuntimeException("OWNER_ROLE não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
-                        roles.add(ownerRole);
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("ADMIN_ROLE não foi encontrada. (" + RoleName.ROLE_ADMIN + ")"));
+                        roles.add(adminRole);
+
                         break;
                     default:
-                        Role userOwner = roleRepository.findByName(RoleName.ROLE_OWNER)
-                                .orElseThrow(() -> new RuntimeException("ROLE_USER_OWNER não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
-                        roles.add(userOwner);
+                        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("USER_ROLE não foi encontrada. (" + RoleName.ROLE_USER + ")"));
+                        roles.add(userRole);
                 }
             });
         } catch (NullPointerException e) {
-            Role userOwner = roleRepository.findByName(RoleName.ROLE_OWNER)
-                    .orElseThrow(() -> new RuntimeException("ROLE_USER_OWNER não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
-            roles.add(userOwner);
+            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("USER_ROLE não foi encontrada. (" + RoleName.ROLE_USER + ")"));
+            roles.add(userRole);
         }
-        owner.setRoles(roles);
+        user.setRoles(roles);
 
-        userService.save(owner);
+        List<Address> addresses = signUpRequest.getAddress();
+        List<Address> addressUser = new ArrayList<>();
 
-        return ResponseEntity.ok().body("Dono foi registrado com sucesso!");
+        addresses.forEach(address -> {
+            addressRepository.save(address);
+            addressUser.add(address);
+        });
+        user.setAddress(addressUser);
+
+        userService.save(user);
+
+        return ResponseEntity.ok().body("Usuário foi registrado com sucesso!");
     }
 }

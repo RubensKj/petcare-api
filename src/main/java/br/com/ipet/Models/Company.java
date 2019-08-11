@@ -41,7 +41,7 @@ public class Company {
     @Size(max = 1000)
     private String avatar;
 
-    @Column(precision = 1)
+    @Column(precision=1, scale=1)
     @DecimalMax("5.0")
     @DecimalMin("0.0")
     private double rate = 5.0;

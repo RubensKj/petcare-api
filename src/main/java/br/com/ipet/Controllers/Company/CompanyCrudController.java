@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers.Company.CompanyActions;
+package br.com.ipet.Controllers.Company;
 
 import br.com.ipet.Models.*;
 import br.com.ipet.Payload.CompanySignUpForm;

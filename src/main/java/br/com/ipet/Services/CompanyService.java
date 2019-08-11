@@ -3,6 +3,7 @@ package br.com.ipet.Services;
 import br.com.ipet.Models.Company;
 import br.com.ipet.Repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,10 @@ public class CompanyService {
 
     public List<Company> findAll() {
         return companyRepository.findAll();
+    }
+
+    public List<Company> findByBetterRate() {
+        return companyRepository.findAll(Sort.by(Sort.Direction.DESC, "rate"));
     }
 
     public boolean existsByCnpj(String cnpj) {

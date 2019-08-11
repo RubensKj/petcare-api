@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers.Address.AddressActions;
+package br.com.ipet.Controllers.Address;
 
 import br.com.ipet.Models.Address;
 import br.com.ipet.Services.AddressService;

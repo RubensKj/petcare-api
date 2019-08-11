@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers.Company.CompanyActions;
+package br.com.ipet.Controllers.Company;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;

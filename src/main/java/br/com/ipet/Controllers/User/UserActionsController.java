@@ -1,4 +1,4 @@
-package br.com.ipet.Controllers.User.UserActions;
+package br.com.ipet.Controllers.User;
 
 import br.com.ipet.Helpers.UserHelper;
 import br.com.ipet.Models.Company;
