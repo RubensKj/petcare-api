@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -22,12 +23,15 @@ public class Company {
     private Long id;
 
     @NotNull
-    @OneToOne
-    private Owner owner;
-
-    @NotNull
     @Size(max = 18)
     private String cnpj;
+
+    @NaturalId
+    @NotNull
+    @NotBlank
+    @Size(max = 250)
+    @Email
+    private String userEmail;
 
     @NotBlank
     @Size(max = 75)
@@ -62,8 +66,7 @@ public class Company {
 
     public Company() {}
 
-    public Company(@NotNull Owner owner, @NotNull @Size(max = 18) String cnpj, @NotBlank @Size(max = 75) String companyName, @Size(max = 350) String description, @Size(max = 10) String status, @Size(max = 1000) String avatar, @DecimalMax("5.0") @DecimalMin("0.0") double rate) {
-        this.owner = owner;
+    public Company(@NotNull String ownerEmail, @NotNull @Size(max = 18) String cnpj, @NotBlank @Size(max = 75) String companyName, @Size(max = 350) String description, @Size(max = 10) String status, @Size(max = 1000) String avatar, @DecimalMax("5.0") @DecimalMin("0.0") double rate) {
         this.cnpj = cnpj;
         this.companyName = companyName;
         this.description = description;
@@ -84,7 +87,7 @@ public class Company {
         return userFavorites;
     }
 
-    public Owner getOwner() {
-        return owner;
+    public String getUserEmail() {
+        return userEmail;
     }
 }

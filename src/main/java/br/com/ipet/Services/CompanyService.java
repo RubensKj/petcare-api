@@ -34,6 +34,10 @@ public class CompanyService {
         return companyRepository.findAll(Sort.by(Sort.Direction.DESC, "rate"));
     }
 
+    public Company findByUserEmail(String email) {
+        return companyRepository.findByUserEmail(email);
+    }
+
     public boolean existsByCnpj(String cnpj) {
         return companyRepository.existsByCnpj(cnpj);
     }

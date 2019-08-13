@@ -29,7 +29,7 @@ import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
 
 @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000"})
 @RestController
-@RequestMapping("/api/owner")
+@RequestMapping("/api/company-auth")
 public class OwnerAuthController {
 
     @Autowired
@@ -66,6 +66,15 @@ public class OwnerAuthController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<?> unauthenticateOwner(HttpServletRequest req) {
         return logoutMethod(req);
+    }
+
+    @PostMapping("/validate-owner-email")
+    public ResponseEntity<String> validateUser(@RequestBody String email) {
+        if (userService.existsByEmail(email)) {
+            return new ResponseEntity<>("Email já está sendo usado!",
+                    HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
     @PostMapping("/signup")

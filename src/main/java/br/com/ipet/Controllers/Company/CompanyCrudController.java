@@ -6,7 +6,6 @@ import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.AddressService;
 import br.com.ipet.Services.CompanyService;
-import br.com.ipet.Services.OwnerService;
 import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,16 +34,12 @@ public class CompanyCrudController {
     private UserService userService;
 
     @Autowired
-    private OwnerService ownerService;
-
-    @Autowired
     private AddressService addressService;
 
     @Autowired
     private JwtProvider jwtProvider;
 
     @PostMapping("/signup-petshop")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<String> save(@Valid @RequestBody CompanySignUpForm companyForm, HttpServletRequest req) {
         if (companyService.existsByCnpj(companyForm.getCnpj())) {
             return new ResponseEntity<>("Já consta no sistema uma empresa com esse CNPJ!",
@@ -54,18 +49,13 @@ public class CompanyCrudController {
         String jwtToken = jwtProvider.getJwt(req);
         String emailFromJwtToken = jwtProvider.getEmailFromJwtToken(jwtToken);
 
-        if(ownerService.existsByEmail(emailFromJwtToken)) {
-            return ResponseEntity.ok("Já possui um dono com este email.");
-        }
-
         User user = userService.findByEmail(emailFromJwtToken);
         Role ownerRole = roleRepository.findByName(RoleName.ROLE_OWNER)
                 .orElseThrow(() -> new RuntimeException("OWNER_ROLE não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
         user.getRoles().add(ownerRole);
 
-        Owner owner = new Owner(user.getEmail());
 
-        Company company = new Company(owner, companyForm.getCnpj(), companyForm.getCompanyName(), companyForm.getDescription(), companyForm.getStatus(), companyForm.getAvatar(), companyForm.getRate());
+        Company company = new Company(user.getEmail(), companyForm.getCnpj(), companyForm.getCompanyName(), companyForm.getDescription(), companyForm.getStatus(), companyForm.getAvatar(), companyForm.getRate());
 
         Set<Address> addresses = companyForm.getAddresses();
         Set<Address> addressesCompany = new HashSet<>();
@@ -76,7 +66,6 @@ public class CompanyCrudController {
         });
         company.setAddresses(addressesCompany);
 
-        ownerService.save(owner);
         userService.save(user);
         companyService.save(company);
         return ResponseEntity.ok("Cadastro feito com sucesso!");
@@ -89,7 +78,7 @@ public class CompanyCrudController {
             Company company = companyService.findById(id);
             String jwtToken = jwtProvider.getJwt(req);
             String emailFromJwtToken = jwtProvider.getEmailFromJwtToken(jwtToken);
-            if (company.getOwner().getEmail().equals(emailFromJwtToken)) {
+            if (company.getUserEmail().equals(emailFromJwtToken)) {
                 companyService.removeById(id);
                 return ResponseEntity.ok("Empresa deletada com sucesso!");
             } else {

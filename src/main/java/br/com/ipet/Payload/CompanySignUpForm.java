@@ -1,8 +1,6 @@
 package br.com.ipet.Payload;
 
 import br.com.ipet.Models.Address;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -14,6 +12,10 @@ public class CompanySignUpForm {
     @NotNull
     @Size(max = 18)
     private String cnpj;
+
+    @NotNull
+    @OneToOne
+    private String ownerEmail;
 
     @NotBlank
     @Size(max = 75)
@@ -31,6 +33,8 @@ public class CompanySignUpForm {
     @DecimalMax("5.0")
     @DecimalMin("0.0")
     private double rate = 5.0;
+
+    private int active = 0;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "company_addresses",
