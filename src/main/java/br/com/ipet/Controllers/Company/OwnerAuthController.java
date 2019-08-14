@@ -8,6 +8,7 @@ import br.com.ipet.Payload.UserOrOwnerForm;
 import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Security.JWT.JwtResponse;
+import br.com.ipet.Services.CompanyService;
 import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,9 @@ public class OwnerAuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private UserService userService;
@@ -69,12 +73,23 @@ public class OwnerAuthController {
     }
 
     @PostMapping("/validate-owner-email")
-    public ResponseEntity<String> validateUser(@RequestBody String email) {
+    public ResponseEntity<String> validateEmail(@RequestBody String email) {
         if (userService.existsByEmail(email)) {
             return new ResponseEntity<>("Email já está sendo usado!",
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return null;
+    }
+
+    @PostMapping("/validate-cnpj")
+    public ResponseEntity<String> validateCnpj(@RequestBody String cnpj) {
+        if (companyService.existsByCnpj(cnpj)) {
+            return new ResponseEntity<>("Já existe uma empresa com o mesmo CNPJ",
+                    HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     @PostMapping("/signup")

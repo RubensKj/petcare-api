@@ -16,6 +16,11 @@ import java.util.Set;
 @Entity
 @DynamicUpdate
 @Getter @Setter
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "cnpj"
+        }),
+})
 public class Company {
 
     @Id
