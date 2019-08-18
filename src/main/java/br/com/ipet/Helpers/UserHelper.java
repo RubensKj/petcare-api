@@ -17,10 +17,6 @@ public class UserHelper {
             user.setCpf(userJSON.getCpf());
         }
 
-        if(!userJSON.getDdd().isEmpty()) {
-            user.setDdd(userJSON.getDdd());
-        }
-
         if(!userJSON.getPhoneNumber().isEmpty()) {
             user.setPhoneNumber(userJSON.getPhoneNumber());
         }

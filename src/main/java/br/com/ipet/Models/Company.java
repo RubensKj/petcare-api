@@ -36,7 +36,7 @@ public class Company {
     @NotBlank
     @Size(max = 250)
     @Email
-    private String userEmail;
+    private String email;
 
     @NotBlank
     @Size(max = 75)
@@ -71,8 +71,9 @@ public class Company {
 
     public Company() {}
 
-    public Company(@NotNull String ownerEmail, @NotNull @Size(max = 18) String cnpj, @NotBlank @Size(max = 75) String companyName, @Size(max = 350) String description, @Size(max = 10) String status, @Size(max = 1000) String avatar, @DecimalMax("5.0") @DecimalMin("0.0") double rate) {
+    public Company(@NotNull @Size(max = 18) String cnpj, @NotNull @NotBlank @Size(max = 250) @Email String email, @NotBlank @Size(max = 75) String companyName, @Size(max = 350) String description, @Size(max = 10) String status, @Size(max = 1000) String avatar, @DecimalMax("5.0") @DecimalMin("0.0") double rate) {
         this.cnpj = cnpj;
+        this.email = email;
         this.companyName = companyName;
         this.description = description;
         this.status = status;
@@ -92,7 +93,7 @@ public class Company {
         return userFavorites;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 }

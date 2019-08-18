@@ -101,7 +101,7 @@ public class OwnerAuthController {
 
         // Creating owner's account
         User owner = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getCompleteName(), signUpRequest.getCpf(), signUpRequest.getDdd(), signUpRequest.getPhoneNumber(), signUpRequest.getAvatar());
+                signUpRequest.getCompleteName(), signUpRequest.getCpf(), signUpRequest.getPhoneNumber(), signUpRequest.getAvatar());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();

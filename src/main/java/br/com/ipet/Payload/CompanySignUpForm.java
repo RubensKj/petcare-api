@@ -10,29 +10,29 @@ import java.util.Set;
 public class CompanySignUpForm {
 
     @NotNull
+    private String email;
+
+    @NotNull
+    private String completeName;
+
+    @NotNull
+    private String password;
+
+    @NotNull
+    private String cpf;
+
+    @NotNull
+    private String phoneNumber;
+
+    @NotNull
     @Size(max = 18)
     private String cnpj;
 
     @NotNull
-    @OneToOne
-    private String ownerEmail;
-
-    @NotBlank
     @Size(max = 75)
     private String companyName;
     @Size(max = 350)
     private String description;
-
-    @Size(max = 10)
-    private String status;
-
-    @Size(max = 1000)
-    private String avatar;
-
-    @Column(precision = 1)
-    @DecimalMax("5.0")
-    @DecimalMin("0.0")
-    private double rate = 5.0;
 
     private int active = 0;
 
@@ -42,6 +42,28 @@ public class CompanySignUpForm {
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     @org.springframework.data.annotation.Transient
     private Set<Address> addresses = new HashSet<>();
+
+    private Set<String> role;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getCompleteName() {
+        return completeName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
     public String getCnpj() {
         return cnpj;
@@ -55,19 +77,15 @@ public class CompanySignUpForm {
         return description;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public double getRate() {
-        return rate;
+    public int getActive() {
+        return active;
     }
 
     public Set<Address> getAddresses() {
         return addresses;
+    }
+
+    public Set<String> getRole() {
+        return role;
     }
 }

@@ -27,7 +27,6 @@ public class UserCompleteForm {
 
     private String cpf;
     private List<Address> address = new ArrayList<>();
-    private String ddd;
     private String phoneNumber;
     private String avatar;
 
@@ -77,14 +76,6 @@ public class UserCompleteForm {
 
     public void setAddress(List<Address> address) {
         this.address = address;
-    }
-
-    public String getDdd() {
-        return ddd;
-    }
-
-    public void setDdd(String ddd) {
-        this.ddd = ddd;
     }
 
     public String getPhoneNumber() {

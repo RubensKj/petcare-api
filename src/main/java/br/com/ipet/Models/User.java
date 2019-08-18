@@ -56,17 +56,12 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    @Size(min = 3, max = 225)
-    @Column(columnDefinition = "varchar(68) default 'Não informado!'")
+    @Size(min = 3, max = 255)
     private String completeName;
 
     @Size(max = 14)
     @Column(columnDefinition = "varchar(15) default 'Não informado!'")
     private String cpf;
-
-    @Size(max = 3)
-    @Column(columnDefinition = "varchar(20) default 'Não informado!'")
-    private String ddd;
 
     @Size(max = 15)
     @Column(columnDefinition = "varchar(20) default 'Não informado!'")
@@ -94,12 +89,11 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, String completeName, String cpf, String ddd, String phoneNumber, String avatar) {
+    public User(String email, String password, String completeName, String cpf, String phoneNumber, String avatar) {
         this.email = email;
         this.password = password;
         this.completeName = completeName;
         this.cpf = cpf;
-        this.ddd = ddd;
         this.phoneNumber = phoneNumber;
         this.avatar = avatar;
     }
@@ -154,14 +148,6 @@ public class User {
 
     public Set<Long> getFavorites() {
         return favorites;
-    }
-
-    public String getDdd() {
-        return ddd;
-    }
-
-    public void setDdd(String ddd) {
-        this.ddd = ddd;
     }
 
     public String getPhoneNumber() {

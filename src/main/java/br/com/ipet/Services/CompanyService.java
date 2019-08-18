@@ -35,7 +35,7 @@ public class CompanyService {
     }
 
     public Company findByUserEmail(String email) {
-        return companyRepository.findByUserEmail(email);
+        return companyRepository.findByEmail(email);
     }
 
     public boolean existsByCnpj(String cnpj) {
