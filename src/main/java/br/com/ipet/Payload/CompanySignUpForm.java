@@ -2,9 +2,8 @@ package br.com.ipet.Payload;
 
 import br.com.ipet.Models.Address;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.HashSet;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 public class CompanySignUpForm {
@@ -36,12 +35,7 @@ public class CompanySignUpForm {
 
     private int active = 0;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "company_addresses",
-            joinColumns = @JoinColumn(name = "company_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id"))
-    @org.springframework.data.annotation.Transient
-    private Set<Address> addresses = new HashSet<>();
+    private Address address;
 
     private Set<String> role;
 
@@ -81,8 +75,8 @@ public class CompanySignUpForm {
         return active;
     }
 
-    public Set<Address> getAddresses() {
-        return addresses;
+    public Address getAddress() {
+        return address;
     }
 
     public Set<String> getRole() {

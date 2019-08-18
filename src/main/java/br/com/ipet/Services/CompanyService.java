@@ -34,7 +34,9 @@ public class CompanyService {
         return companyRepository.findAll(Sort.by(Sort.Direction.DESC, "rate"));
     }
 
-    public Company findByUserEmail(String email) {
+    public boolean existsByEmail(String email) { return companyRepository.existsByEmail(email); }
+
+    public Company findByOwnerEmail(String email) {
         return companyRepository.findByEmail(email);
     }
 

@@ -46,6 +46,11 @@ public class CompanyCrudController {
 
     @PostMapping("/signup-petshop")
     public ResponseEntity<String> save(@Valid @RequestBody CompanySignUpForm companyForm) {
+        if (companyForm == null) {
+            return new ResponseEntity<>("JSON está vázio",
+                    HttpStatus.NOT_ACCEPTABLE);
+        }
+
         if (companyService.existsByCnpj(companyForm.getCnpj())) {
             return new ResponseEntity<>("Já consta no sistema uma empresa com esse CNPJ!",
                     HttpStatus.FORBIDDEN);
@@ -61,19 +66,13 @@ public class CompanyCrudController {
                     HttpStatus.FORBIDDEN);
         }
 
-        System.out.println(companyForm.getEmail());
-        System.out.println(companyForm.getCompleteName());
-
         User user = new User(companyForm.getEmail(), encoder.encode(companyForm.getPassword()), companyForm.getCompleteName(), companyForm.getCpf(), companyForm.getPhoneNumber(), "");
         Company company = new Company(companyForm.getCnpj(), companyForm.getEmail(), companyForm.getCompanyName(), companyForm.getDescription(), "Fechado", "", 5.0);
 
-        Set<Address> addresses = companyForm.getAddresses();
+        Address address = companyForm.getAddress();
         Set<Address> addressesCompany = new HashSet<>();
-
-        addresses.forEach(address -> {
-            addressService.save(address);
-            addressesCompany.add(address);
-        });
+        addressService.save(address);
+        addressesCompany.add(address);
         company.setAddresses(addressesCompany);
 
         Set<String> strRoles = companyForm.getRole();

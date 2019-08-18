@@ -1,11 +1,6 @@
 package br.com.ipet.Controllers.Company;
 
-import br.com.ipet.Models.Role;
-import br.com.ipet.Models.RoleName;
-import br.com.ipet.Models.User;
-import br.com.ipet.Payload.UserCompleteForm;
 import br.com.ipet.Payload.UserOrOwnerForm;
-import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Security.JWT.JwtResponse;
 import br.com.ipet.Services.CompanyService;
@@ -18,13 +13,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
 
 import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
 
@@ -43,27 +35,26 @@ public class OwnerAuthController {
     private UserService userService;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
     private JwtProvider jwtProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserOrOwnerForm loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+    public ResponseEntity<?> authenticateOwner(@Valid @RequestBody UserOrOwnerForm loginRequest) {
+        if (companyService.existsByEmail(loginRequest.getEmail())) {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = jwtProvider.generateJwtToken(authentication);
-        return ResponseEntity.ok(new JwtResponse(jwt));
+            String jwt = jwtProvider.generateJwtToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(jwt));
+        } else {
+            return new ResponseEntity<>("Não existe nenhuma empresa com este email!",
+                    HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/logout")
@@ -90,50 +81,5 @@ public class OwnerAuthController {
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserCompleteForm signUpRequest) {
-        if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>("Email já está sendo usado, ou você já é um usuário, ou seja, basta logar e clicar no botão 'Criar Empresa'!",
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        // Creating owner's account
-        User owner = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getCompleteName(), signUpRequest.getCpf(), signUpRequest.getPhoneNumber(), signUpRequest.getAvatar());
-
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        try {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "user":
-                        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("ROLE_USER não foi encontrada. (" + RoleName.ROLE_USER + ")"));
-                        roles.add(userRole);
-                        break;
-                    case "owner":
-                        Role ownerRole = roleRepository.findByName(RoleName.ROLE_OWNER)
-                                .orElseThrow(() -> new RuntimeException("OWNER_ROLE não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
-                        roles.add(ownerRole);
-                        break;
-                    default:
-                        Role userOwner = roleRepository.findByName(RoleName.ROLE_OWNER)
-                                .orElseThrow(() -> new RuntimeException("ROLE_USER_OWNER não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
-                        roles.add(userOwner);
-                }
-            });
-        } catch (NullPointerException e) {
-            Role userOwner = roleRepository.findByName(RoleName.ROLE_OWNER)
-                    .orElseThrow(() -> new RuntimeException("ROLE_USER_OWNER não foi encontrada. (" + RoleName.ROLE_OWNER + ")"));
-            roles.add(userOwner);
-        }
-        owner.setRoles(roles);
-
-        userService.save(owner);
-
-        return ResponseEntity.ok().body("Dono foi registrado com sucesso!");
     }
 }
