@@ -65,6 +65,9 @@ public class Company {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> userFavorites;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> products;
+
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime creationDate;
@@ -85,6 +88,10 @@ public class Company {
         return id;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
@@ -93,7 +100,7 @@ public class Company {
         return userFavorites;
     }
 
-    public String getEmail() {
-        return email;
+    public Set<Long> getProducts() {
+        return products;
     }
 }
