@@ -38,9 +38,16 @@ public class ProductCrudController {
 
     @GetMapping("/products/{page}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
-    public ResponseEntity<Page<Product>> listProducts(@PathVariable("page") int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 10);
-        return ResponseEntity.ok(productService.findAllByPage(pageable));
+    public ResponseEntity<Page<Product>> listProducts(@PathVariable("page") int pageNumber, HttpServletRequest req) {
+        String jwtToken = jwtProvider.getJwt(req);
+        String emailOwnerLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
+        if(emailOwnerLogged != null) {
+            Company company = companyService.findByOwnerEmail(emailOwnerLogged);
+            Pageable pageable = PageRequest.of(pageNumber, 10);
+            return ResponseEntity.ok(productService.findAllProducts(company.getProducts(), pageable));
+        } else {
+            return ResponseEntity.ok(null);
+        }
     }
 
     @PostMapping("/create-product")

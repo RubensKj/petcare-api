@@ -4,11 +4,12 @@ import br.com.ipet.Models.Company;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000" })
 @RestController
@@ -33,14 +34,15 @@ public class PageCompanyController {
     }
 
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getAllCompanies() {
-        return ResponseEntity.ok(companyService.findAll());
+    public ResponseEntity<Iterable<Company>> getAllCompanies() {
+        Pageable pageable = PageRequest.of(0, 9);
+        return ResponseEntity.ok(companyService.findAll(pageable));
     }
 
-    @GetMapping("/companies-rate")
-    public ResponseEntity<List<Company>> getCompaniesWithBetterRate() {
-        return ResponseEntity.ok(companyService.findByBetterRate());
-    }
+//    @GetMapping("/companies-rate")
+//    public ResponseEntity<List<Company>> getCompaniesWithBetterRate() {
+//        return ResponseEntity.ok(companyService.findByBetterRate());
+//    }
 
     @GetMapping("/companies/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class ProductService {
 
@@ -25,4 +27,5 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
+    public Page<Product> findAllProducts(Set<Long> ids, Pageable pageable) { return productRepository.findProductsByIdIn(ids, pageable); }
 }
