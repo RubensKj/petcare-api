@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "address", schema = "aw-petcare-api")
+@Table(name = "address", schema = "awpetcareapi")
 @DynamicUpdate
 @DynamicInsert
 @Getter

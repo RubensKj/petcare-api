@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "product", schema = "aw-petcare-api")
+@Table(name = "product", schema = "awpetcareapi")
 @DynamicUpdate
 @Getter
 @Setter
