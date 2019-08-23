@@ -19,7 +19,7 @@ import java.util.*;
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "user", schema = "awpetcareapi",uniqueConstraints = {
+@Table(name = "user",uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "email"
         }),
