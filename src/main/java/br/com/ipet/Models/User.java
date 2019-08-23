@@ -35,7 +35,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "iduser")
-    private Long id;
+    private Long iduser;
 
     @NaturalId
     @NotNull
@@ -100,7 +100,7 @@ public class User {
     }
 
     public Long getId() {
-        return id;
+        return iduser;
     }
 
     public String getPassword() {
