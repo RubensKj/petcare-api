@@ -34,8 +34,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
-    @Column(name = "iduser", unique = true)
-    private long id;
+    @Column(name = "id_user")
+    private Long id;
 
     @NaturalId
     @NotNull
@@ -99,7 +99,7 @@ public class User {
         this.avatar = avatar;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
