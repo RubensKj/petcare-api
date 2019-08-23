@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @DynamicUpdate
 @Getter @Setter
-@Table(uniqueConstraints = {
+@Table(name = "user", schema = "aw-petcare-api", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "cnpj"
         }),
