@@ -33,6 +33,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(name = "id_user", strategy = "increment")
     @Column(name = "id_user")
     private Long id;
 
