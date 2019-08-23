@@ -34,7 +34,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
-    @Column(name = "iduser", unique = true, nullable = false)
+    @Column(name = "iduser", unique = true)
     private long id;
 
     @NaturalId
