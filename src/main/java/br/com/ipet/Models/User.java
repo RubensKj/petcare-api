@@ -34,6 +34,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
+    @Column(name = "iduser")
     private Long id;
 
     @NaturalId
@@ -51,7 +52,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_pet_care_id"),
+            joinColumns = @JoinColumn(name = "user_pet_care_iduser"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
