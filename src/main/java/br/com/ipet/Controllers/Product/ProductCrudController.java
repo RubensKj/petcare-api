@@ -53,7 +53,7 @@ public class ProductCrudController {
 
     @PostMapping("/create-product")
     @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
-    public ResponseEntity<String> saveProduct(@RequestParam("file") MultipartFile file, Product product, HttpServletRequest req) {
+    public ResponseEntity<String> saveProduct(MultipartFile file, Product product, HttpServletRequest req) {
         if (product != null) {
             String jwtToken = jwtProvider.getJwt(req);
             String emailOwnerLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
