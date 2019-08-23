@@ -9,5 +9,6 @@ import java.util.Set;
 
 public interface ProductRepository extends PagingAndSortingRepository<Product, Long> {
     Product findByName(String name);
+    Product findById(long id);
     Page<Product> findProductsByIdIn(Set<Long> ids, Pageable pageable);
 }

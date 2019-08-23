@@ -6,11 +6,13 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @DynamicUpdate
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
 
     @NotNull
@@ -54,7 +56,7 @@ public class Product {
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     public Product() {
     }
@@ -73,6 +75,10 @@ public class Product {
 
     public long getId() {
         return id;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public void setAvatar(String avatar) {

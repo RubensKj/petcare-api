@@ -21,6 +21,12 @@ public class ProductService {
 
     public void remove(Product product) { productRepository.delete(product); }
 
+    public void removeById(long id) { productRepository.deleteById(id); }
+
+    public Product findById(long id) { return productRepository.findById(id); }
+
+    public Boolean existsById(long id) { return productRepository.existsById(id); }
+
     public Page<Product> findAllByPage(Pageable page) { return productRepository.findAll(page); }
 
     public Product findByProduct(String name) {
