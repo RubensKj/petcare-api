@@ -1,5 +1,6 @@
 package br.com.ipet.Models;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -8,7 +9,8 @@ import javax.persistence.*;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
     private int id;
 
     @Enumerated(EnumType.STRING)
