@@ -66,6 +66,9 @@ public class CompanyCrudController {
                     HttpStatus.FORBIDDEN);
         }
 
+        System.out.println(companyForm.getEmail());
+        System.out.println(companyForm.getCompleteName());
+
         User user = new User(companyForm.getEmail(), encoder.encode(companyForm.getPassword()), companyForm.getCompleteName(), companyForm.getCpf(), companyForm.getPhoneNumber(), "");
         Company company = new Company(companyForm.getCnpj(), companyForm.getEmail(), companyForm.getCompanyName(), companyForm.getDescription(), "Fechado", "", 5.0);
 

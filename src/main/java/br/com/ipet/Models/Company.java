@@ -70,6 +70,9 @@ public class Company {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> products;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> services;
+
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime creationDate;
@@ -104,5 +107,9 @@ public class Company {
 
     public Set<Long> getProducts() {
         return products;
+    }
+
+    public Set<Long> getServices() {
+        return services;
     }
 }
