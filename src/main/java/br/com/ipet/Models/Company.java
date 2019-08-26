@@ -11,7 +11,6 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -57,12 +56,11 @@ public class Company {
     @DecimalMin("0.0")
     private double rate = 5.0;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "company_addresses",
-            joinColumns = @JoinColumn(name = "company_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id"))
-    @org.springframework.data.annotation.Transient
-    private Set<Address> addresses = new HashSet<>();
+//    @JoinTable(name = "company_address",
+//            joinColumns = @JoinColumn(name = "company_id"),
+//            inverseJoinColumns = @JoinColumn(name = "address_id"))
+    @OneToOne
+    private Address address;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> userFavorites;
@@ -97,8 +95,8 @@ public class Company {
         return email;
     }
 
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public Set<Long> getUserFavorites() {
@@ -111,5 +109,9 @@ public class Company {
 
     public Set<Long> getServices() {
         return services;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

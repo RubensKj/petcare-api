@@ -6,16 +6,20 @@ import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.AddressService;
 import br.com.ipet.Services.CompanyService;
+import br.com.ipet.Services.FileStorageService;
 import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -40,6 +44,9 @@ public class CompanyCrudController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -73,10 +80,8 @@ public class CompanyCrudController {
         Company company = new Company(companyForm.getCnpj(), companyForm.getEmail(), companyForm.getCompanyName(), companyForm.getDescription(), "Fechado", "", 5.0);
 
         Address address = companyForm.getAddress();
-        Set<Address> addressesCompany = new HashSet<>();
         addressService.save(address);
-        addressesCompany.add(address);
-        company.setAddresses(addressesCompany);
+        company.setAddress(address);
 
         Set<String> strRoles = companyForm.getRole();
         Set<Role> roles = new HashSet<>();
@@ -116,6 +121,35 @@ public class CompanyCrudController {
         userService.save(user);
         companyService.save(company);
         return ResponseEntity.ok("Cadastro feito com sucesso!");
+    }
+
+    @PostMapping("/change-company-image/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<String> editImage(@PathVariable long id, MultipartFile file, HttpServletRequest req) {
+        try {
+            Company company = companyService.findById(id);
+            String jwtToken = jwtProvider.getJwt(req);
+            String emailFromJwtToken = jwtProvider.getEmailFromJwtToken(jwtToken);
+            if (company.getEmail().equals(emailFromJwtToken)) {
+                if (file != null && (file.getOriginalFilename().contains("jpeg") || file.getOriginalFilename().contains("png") || file.getOriginalFilename().contains("jpg"))) {
+                    String removeContext = "/api/change-company-image";
+                    String fileName = fileStorageService.storeFile(file);
+                    Resource resource = fileStorageService.loadFileAsResource(fileName);
+                    URI contextUrl = URI.create(req.getRequestURL().toString()).resolve(req.getContextPath());
+                    String urlImage = contextUrl + "images/" + resource.getFilename();
+                    if (urlImage.contains(removeContext)) {
+                        urlImage = urlImage.replace(removeContext, "");
+                    }
+                    company.setAvatar(urlImage);
+                    companyService.save(company);
+                }
+                return ResponseEntity.ok("Avatar da empresa alterado com sucesso!");
+            } else {
+                return ResponseEntity.ok("Apenas o dono pode alterar o avatar da empresa.");
+            }
+        } catch (NullPointerException | NoSuchElementException e) {
+            return ResponseEntity.ok("Não existe nenhuma empresa com esse id.");
+        }
     }
 
     @PostMapping("/remove-petshop/{id}")
