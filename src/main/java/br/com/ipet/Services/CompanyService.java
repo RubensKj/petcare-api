@@ -42,4 +42,8 @@ public class CompanyService {
     public boolean existsByCnpj(String cnpj) {
         return companyRepository.existsByCnpj(cnpj);
     }
+
+    public boolean existsById(Long id) {
+        return companyRepository.existsById(id);
+    }
 }

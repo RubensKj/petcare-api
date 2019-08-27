@@ -1,6 +1,8 @@
 package br.com.ipet.Controllers.Company;
 
+import br.com.ipet.Controllers.File.FileController;
 import br.com.ipet.Models.*;
+import br.com.ipet.Payload.CompanyEditForm;
 import br.com.ipet.Payload.CompanySignUpForm;
 import br.com.ipet.Repository.RoleRepository;
 import br.com.ipet.Security.JWT.JwtProvider;
@@ -9,7 +11,6 @@ import br.com.ipet.Services.CompanyService;
 import br.com.ipet.Services.FileStorageService;
 import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -133,13 +133,7 @@ public class CompanyCrudController {
             if (company.getEmail().equals(emailFromJwtToken)) {
                 if (file != null && (file.getOriginalFilename().contains("jpeg") || file.getOriginalFilename().contains("png") || file.getOriginalFilename().contains("jpg"))) {
                     String removeContext = "/api/change-company-image";
-                    String fileName = fileStorageService.storeFile(file);
-                    Resource resource = fileStorageService.loadFileAsResource(fileName);
-                    URI contextUrl = URI.create(req.getRequestURL().toString()).resolve(req.getContextPath());
-                    String urlImage = contextUrl + "images/" + resource.getFilename();
-                    if (urlImage.contains(removeContext)) {
-                        urlImage = urlImage.replace(removeContext, "");
-                    }
+                    String urlImage = FileController.saveImage(file, req, removeContext, fileStorageService);
                     company.setAvatar(urlImage);
                     companyService.save(company);
                 }
@@ -149,6 +143,44 @@ public class CompanyCrudController {
             }
         } catch (NullPointerException | NoSuchElementException e) {
             return ResponseEntity.ok("Não existe nenhuma empresa com esse id.");
+        }
+    }
+
+    @PostMapping("/edit-company/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<String> editCompanyInformation(@PathVariable long id, @Valid @RequestBody CompanyEditForm companyEditForm, HttpServletRequest req) {
+        if (companyEditForm != null && companyService.existsById(id)) {
+            String jwtToken = jwtProvider.getJwt(req);
+            String emailOwnerLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
+            Company company = companyService.findById(id);
+
+            if (!emailOwnerLogged.isEmpty()) {
+                if(companyEditForm.getCnpj() != null) {
+                    company.setCnpj(companyEditForm.getCnpj());
+                }
+
+                if(companyEditForm.getCompanyName() != null) {
+                    company.setCompanyName(companyEditForm.getCompanyName());
+                }
+
+                if(companyEditForm.getDescription() != null && companyEditForm.getDescription().length() > 0) {
+                    company.setDescription(companyEditForm.getDescription());
+                }
+
+                if(companyEditForm.getAddress() != null) {
+                    addressService.save(companyEditForm.getAddress());
+                    company.setAddress(companyEditForm.getAddress());
+                }
+                companyService.save(company);
+                return new ResponseEntity<>("Company was edited",
+                        HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Any company connected on application",
+                        HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<>("Company is empty",
+                    HttpStatus.NOT_FOUND);
         }
     }
 

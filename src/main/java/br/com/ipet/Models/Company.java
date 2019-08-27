@@ -114,4 +114,16 @@ public class Company {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

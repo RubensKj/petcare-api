@@ -1,5 +1,6 @@
 package br.com.ipet.Controllers.Product;
 
+import br.com.ipet.Controllers.File.FileController;
 import br.com.ipet.Models.Company;
 import br.com.ipet.Models.Product;
 import br.com.ipet.Security.JWT.JwtProvider;
@@ -125,14 +126,8 @@ public class ProductCrudController {
 
             if (file != null && (file.getOriginalFilename().contains("jpeg") || file.getOriginalFilename().contains("png") || file.getOriginalFilename().contains("jpg"))) {
                 String removeContext = "/api/edit-product";
-                String fileName = fileStorageService.storeFile(file);
-                Resource resource = fileStorageService.loadFileAsResource(fileName);
-                URI contextUrl = URI.create(req.getRequestURL().toString()).resolve(req.getContextPath());
-                String urlImage = contextUrl + "images/" + resource.getFilename();
-                if (urlImage.contains(removeContext)) {
-                    urlImage = urlImage.replace(removeContext, "");
-                }
-                if(product.getAvatar() == null || !product.getAvatar().contains(urlImage)) {
+                String urlImage = FileController.saveImage(file, req, removeContext, fileStorageService);
+                if (product.getAvatar() == null || !product.getAvatar().contains(urlImage)) {
                     product.setAvatar(urlImage);
                 }
             }
@@ -146,7 +141,7 @@ public class ProductCrudController {
                         HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("Product was empty",
+            return new ResponseEntity<>("Product is empty",
                     HttpStatus.NOT_FOUND);
         }
     }

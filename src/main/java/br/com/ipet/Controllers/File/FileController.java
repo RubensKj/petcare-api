@@ -54,4 +54,16 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
+
+    public static String saveImage(MultipartFile file, HttpServletRequest req, String removeContext, FileStorageService fileStorageService) {
+        String fileName = fileStorageService.storeFile(file);
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        URI contextUrl = URI.create(req.getRequestURL().toString()).resolve(req.getContextPath());
+        String urlImage = contextUrl + "images/" + resource.getFilename();
+        if (urlImage.contains(removeContext)) {
+            return urlImage.replace(removeContext, "");
+        } else {
+            return urlImage;
+        }
+    }
 }
