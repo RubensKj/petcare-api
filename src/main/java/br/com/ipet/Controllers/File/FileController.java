@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
 @RestController
 @RequestMapping("/")
 public class FileController {
