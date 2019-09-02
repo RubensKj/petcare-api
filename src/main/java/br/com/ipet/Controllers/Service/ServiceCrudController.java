@@ -45,6 +45,17 @@ public class ServiceCrudController {
         }
     }
 
+    @GetMapping("/company-services/{id}/{page}")
+    public ResponseEntity<Page<Service>> listIdsToServices(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
+        if(companyService.existsById(id)) {
+            Company company = companyService.findById(id);
+            Pageable pageable = PageRequest.of(pageNumber, 10);
+            return ResponseEntity.ok(serviceService.findByIds(company.getServices(), pageable));
+        } else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
     @PostMapping("/create-service")
     @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<String> saveProduct(@Valid @RequestBody Service service, HttpServletRequest req) {

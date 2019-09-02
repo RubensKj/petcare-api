@@ -33,9 +33,9 @@ public class PageCompanyController {
         }
     }
 
-    @GetMapping("/companies")
-    public ResponseEntity<Iterable<Company>> getAllCompanies() {
-        Pageable pageable = PageRequest.of(0, 9);
+    @GetMapping("/companies/{page}")
+    public ResponseEntity<Iterable<Company>> getAllCompanies(@PathVariable int page) {
+        Pageable pageable = PageRequest.of(page, 9);
         return ResponseEntity.ok(companyService.findAll(pageable));
     }
 
@@ -44,7 +44,7 @@ public class PageCompanyController {
 //        return ResponseEntity.ok(companyService.findByBetterRate());
 //    }
 
-    @GetMapping("/companies/{id}")
+    @GetMapping("/companies-list/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findById(id));
     }

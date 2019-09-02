@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000"})
 @RestController
 @RequestMapping("/api")
 public class ProductCrudController {
@@ -47,6 +47,17 @@ public class ProductCrudController {
             Company company = companyService.findByOwnerEmail(emailOwnerLogged);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(productService.findAllProducts(company.getProducts(), pageable));
+        } else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    @GetMapping("/company-products/{id}/{page}")
+    public ResponseEntity<Page<Product>> listIdsToProducts(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
+        if(companyService.existsById(id)) {
+            Company company = companyService.findById(id);
+            Pageable pageable = PageRequest.of(pageNumber, 10);
+            return ResponseEntity.ok(productService.findByIds(company.getProducts(), pageable));
         } else {
             return ResponseEntity.ok(null);
         }

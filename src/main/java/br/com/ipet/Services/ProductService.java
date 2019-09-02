@@ -19,7 +19,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void remove(Product product) { productRepository.delete(product); }
+//    public void remove(Product product) { productRepository.delete(product); }
 
     public void removeById(long id) { productRepository.deleteById(id); }
 
@@ -27,11 +27,15 @@ public class ProductService {
 
     public Boolean existsById(long id) { return productRepository.existsById(id); }
 
-    public Page<Product> findAllByPage(Pageable page) { return productRepository.findAll(page); }
+//    public Page<Product> findAllByPage(Pageable page) { return productRepository.findAll(page); }
 
     public Product findByProduct(String name) {
         return productRepository.findByName(name);
     }
 
     public Page<Product> findAllProducts(Set<Long> ids, Pageable pageable) { return productRepository.findProductsByIdIn(ids, pageable); }
+
+    public Page<Product> findByIds(Set<Long> ids, Pageable pageable) {
+        return productRepository.findByIdIn(ids, pageable);
+    }
 }
