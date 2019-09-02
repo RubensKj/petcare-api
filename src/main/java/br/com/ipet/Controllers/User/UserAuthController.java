@@ -24,14 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000"})
 @RestController
 @RequestMapping("/api/auth")
 public class UserAuthController {
@@ -127,14 +125,12 @@ public class UserAuthController {
         }
         user.setRoles(roles);
 
-        List<Address> addresses = signUpRequest.getAddress();
-        List<Address> addressUser = new ArrayList<>();
+        Address address = signUpRequest.getAddress();
 
-        addresses.forEach(address -> {
+        if(address != null) {
             addressRepository.save(address);
-            addressUser.add(address);
-        });
-        user.setAddress(addressUser);
+            user.setAddress(address);
+        }
 
         userService.save(user);
 

@@ -43,4 +43,12 @@ public class Address {
     public int getId() {
         return id;
     }
+
+    public String getComplement() {
+        return complement;
+    }
+
+    public String getStreet() {
+        return street;
+    }
 }

@@ -3,9 +3,12 @@ package br.com.ipet.Services;
 import br.com.ipet.Models.Company;
 import br.com.ipet.Repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class CompanyService {
@@ -45,5 +48,9 @@ public class CompanyService {
 
     public boolean existsById(Long id) {
         return companyRepository.existsById(id);
+    }
+
+    public Page<Company> findAllByIds(Set<Long> favorites, Pageable pageable) {
+        return companyRepository.findByIdIn(favorites, pageable);
     }
 }

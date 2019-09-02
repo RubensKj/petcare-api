@@ -72,9 +72,9 @@ public class User {
 //            joinColumns = @JoinColumn(name = "user_id"),
 //            inverseJoinColumns = @JoinColumn(name = "address_id"))
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToOne
     @Transient
-    private List<Address> address = new ArrayList<>();
+    private Address address;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> favorites = new HashSet<>();
@@ -143,7 +143,11 @@ public class User {
         this.avatar = avatar;
     }
 
-    public void setAddress(List<Address> address) {
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
         this.address = address;
     }
 

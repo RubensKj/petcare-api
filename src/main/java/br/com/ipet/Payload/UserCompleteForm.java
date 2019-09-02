@@ -5,8 +5,6 @@ import br.com.ipet.Models.Address;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class UserCompleteForm {
@@ -26,7 +24,7 @@ public class UserCompleteForm {
     private String completeName;
 
     private String cpf;
-    private List<Address> address = new ArrayList<>();
+    private Address address;
     private String phoneNumber;
     private String avatar;
 
@@ -70,11 +68,11 @@ public class UserCompleteForm {
         this.cpf = cpf;
     }
 
-    public List<Address> getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(List<Address> address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
