@@ -2,10 +2,12 @@ package br.com.ipet.Controllers.Product;
 
 import br.com.ipet.Controllers.File.FileController;
 import br.com.ipet.Models.Company;
+import br.com.ipet.Models.Order;
 import br.com.ipet.Models.Product;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.CompanyService;
 import br.com.ipet.Services.FileStorageService;
+import br.com.ipet.Services.OrderService;
 import br.com.ipet.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -28,6 +30,9 @@ public class ProductCrudController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private CompanyService companyService;
@@ -58,6 +63,17 @@ public class ProductCrudController {
             Company company = companyService.findById(id);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(productService.findByIds(company.getProducts(), pageable));
+        } else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    @GetMapping("/order-products/{id}/{page}")
+    public ResponseEntity<Page<Product>> listIdsToOrderProducts(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
+        if(orderService.existsById(id)) {
+            Order order = orderService.findById(id);
+            Pageable pageable = PageRequest.of(pageNumber, 10);
+            return ResponseEntity.ok(productService.findByIds(order.getProductsIdsCart(), pageable));
         } else {
             return ResponseEntity.ok(null);
         }

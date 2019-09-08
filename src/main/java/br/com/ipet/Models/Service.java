@@ -2,6 +2,7 @@ package br.com.ipet.Models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "service")
 @DynamicUpdate
+@DynamicInsert
 @Getter
 @Setter
 public class Service {

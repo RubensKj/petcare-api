@@ -29,7 +29,7 @@ public class ProductService {
 
 //    public Page<Product> findAllByPage(Pageable page) { return productRepository.findAll(page); }
 
-    public Product findByProduct(String name) {
+    public Product findByProductName(String name) {
         return productRepository.findByName(name);
     }
 
@@ -37,5 +37,9 @@ public class ProductService {
 
     public Page<Product> findByIds(Set<Long> ids, Pageable pageable) {
         return productRepository.findByIdIn(ids, pageable);
+    }
+
+    public Set<Product> findAllProductsByIds(Set<Long> ids) {
+        return productRepository.findProductsByIdIn(ids);
     }
 }

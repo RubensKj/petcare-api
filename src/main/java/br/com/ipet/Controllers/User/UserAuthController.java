@@ -69,7 +69,7 @@ public class UserAuthController {
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('OWNER') or hasRole('ADMIN')")
     public ResponseEntity<?> unauthenticateUser(HttpServletRequest req) {
         return logoutMethod(req);
     }

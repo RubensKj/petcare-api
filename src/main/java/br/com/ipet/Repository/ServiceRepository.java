@@ -13,4 +13,6 @@ public interface ServiceRepository extends PagingAndSortingRepository<Service, L
     Page<Service> findProductsByIdIn(Set<Long> ids, Pageable pageable);
 
     Page<Service> findByIdIn(Set<Long> ids, Pageable pageable);
+
+    Set<Service> findProductsByIdIn(Set<Long> ids);
 }

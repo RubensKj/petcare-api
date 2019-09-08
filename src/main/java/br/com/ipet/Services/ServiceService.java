@@ -37,4 +37,8 @@ public class ServiceService {
     public Page<br.com.ipet.Models.Service> findByIds(Set<Long> ids, Pageable pageable) {
         return serviceRepository.findByIdIn(ids, pageable);
     }
+
+    public Set<br.com.ipet.Models.Service> findAllServicesByIds(Set<Long> ids) {
+        return serviceRepository.findProductsByIdIn(ids);
+    }
 }

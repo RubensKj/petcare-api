@@ -79,6 +79,9 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> favorites = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> orders;
+
     @Size(max = 1000)
     @Column(columnDefinition = "varchar(1000) default 'https://decoradornet.com.br/upload/images/default-avatar.jpg'")
     private String avatar;
@@ -149,6 +152,10 @@ public class User {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Set<Long> getOrders() {
+        return orders;
     }
 
     public Set<Long> getFavorites() {

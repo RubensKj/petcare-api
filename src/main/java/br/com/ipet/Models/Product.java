@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 @Entity
 @Table(name = "product")
 @DynamicUpdate
+@DynamicInsert
 @Getter
 @Setter
 public class Product {
@@ -84,5 +86,13 @@ public class Product {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public int getQuantityStore() {
+        return quantityStore;
+    }
+
+    public void setQuantityStore(int quantityStore) {
+        this.quantityStore = quantityStore;
     }
 }

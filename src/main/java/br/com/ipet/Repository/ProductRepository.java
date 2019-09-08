@@ -13,4 +13,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
     Page<Product> findProductsByIdIn(Set<Long> ids, Pageable pageable);
 
     Page<Product> findByIdIn(Set<Long> ids, Pageable pageable);
+
+    Set<Product> findProductsByIdIn(Set<Long> ids);
 }

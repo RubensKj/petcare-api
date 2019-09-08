@@ -1,9 +1,11 @@
 package br.com.ipet.Controllers.Service;
 
 import br.com.ipet.Models.Company;
+import br.com.ipet.Models.Order;
 import br.com.ipet.Models.Service;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.CompanyService;
+import br.com.ipet.Services.OrderService;
 import br.com.ipet.Services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,9 @@ public class ServiceCrudController {
 
     @Autowired
     private ServiceService serviceService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private CompanyService companyService;
@@ -51,6 +56,17 @@ public class ServiceCrudController {
             Company company = companyService.findById(id);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(serviceService.findByIds(company.getServices(), pageable));
+        } else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    @GetMapping("/order-services/{id}/{page}")
+    public ResponseEntity<Page<Service>> listIdsToOrderServices(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
+        if(orderService.existsById(id)) {
+            Order order = orderService.findById(id);
+            Pageable pageable = PageRequest.of(pageNumber, 10);
+            return ResponseEntity.ok(serviceService.findByIds(order.getServicesIdsCart(), pageable));
         } else {
             return ResponseEntity.ok(null);
         }
