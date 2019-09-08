@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,14 +103,15 @@ public class OrderCrudController {
 
     @GetMapping("/orders/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
-    public ResponseEntity<Order> getOrderById(@PathVariable("id") long id, HttpServletRequest req) {
+    public ResponseEntity<?> getOrderById(@PathVariable("id") long id, HttpServletRequest req) {
         String jwtToken = jwtProvider.getJwt(req);
         String emailUserLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
         Order order = orderService.findById(id);
         if (order != null && emailUserLogged.equals(order.getEmailOrderUser())) {
             return ResponseEntity.ok(order);
         }
-        return null;
+        return new ResponseEntity<>("Any company connected on application",
+                HttpStatus.FORBIDDEN);
     }
 
     private User getUserLogger(HttpServletRequest req) {
