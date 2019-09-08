@@ -56,7 +56,7 @@ public class OrderCrudController {
             return ResponseEntity.ok("Order without user's email.");
         }
 
-        if (order.getProductsIdsCart().isEmpty() || order.getServicesIdsCart().isEmpty()) {
+        if (order.getProductsIdsCart().isEmpty() && order.getServicesIdsCart().isEmpty()) {
             return ResponseEntity.ok("Order without items!");
         }
 
