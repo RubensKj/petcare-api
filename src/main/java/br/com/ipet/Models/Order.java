@@ -31,7 +31,11 @@ public class Order {
     @OneToOne
     private Address companyOrderAddress;
 
+    private String cnpj;
+
     private String emailOrderUser;
+
+    private String userCompleteName;
 
     private BigDecimal total;
 
@@ -69,6 +73,10 @@ public class Order {
 
     public Long getId() {
         return id;
+    }
+
+    public String getCnpj() {
+        return cnpj;
     }
 
     public String getNameOfCompany() {

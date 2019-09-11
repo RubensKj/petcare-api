@@ -1,14 +1,8 @@
 package br.com.ipet.Controllers.Order;
 
-import br.com.ipet.Models.Order;
-import br.com.ipet.Models.Product;
-import br.com.ipet.Models.StatusOrder;
-import br.com.ipet.Models.User;
+import br.com.ipet.Models.*;
 import br.com.ipet.Security.JWT.JwtProvider;
-import br.com.ipet.Services.AddressService;
-import br.com.ipet.Services.OrderService;
-import br.com.ipet.Services.ProductService;
-import br.com.ipet.Services.UserService;
+import br.com.ipet.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +28,9 @@ public class OrderCrudController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private AddressService addressService;
@@ -101,6 +98,19 @@ public class OrderCrudController {
         return orderService.findByIdInAndStatusOrderIs(user.getOrders(), StatusOrder.FINISHED, pageable);
     }
 
+    @GetMapping("/get-orders-company/{page}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
+    public Page<Order> getCompaniesOrder(@PathVariable("page") int pageNumber, HttpServletRequest req) {
+        String jwtToken = jwtProvider.getJwt(req);
+        String emailCompanyLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
+        Company company = companyService.findByOwnerEmail(emailCompanyLogged);
+        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("createdOrderAt").descending());
+        if (company != null || emailCompanyLogged != null) {
+            return orderService.findByIdInAndStatusOrderIsNot(company.getOrders(), StatusOrder.FINISHED, pageable);
+        }
+        return null;
+    }
+
     @GetMapping("/orders/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<?> getOrderById(@PathVariable("id") long id, HttpServletRequest req) {
@@ -112,6 +122,34 @@ public class OrderCrudController {
         }
         return new ResponseEntity<>("Any company connected on application",
                 HttpStatus.FORBIDDEN);
+    }
+
+    @PutMapping("/orders-process/{id}/{numberProcess}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    public void setProcessOfOrder(@PathVariable("id") long id, @PathVariable("numberProcess") int number, HttpServletRequest req) {
+        String jwtToken = jwtProvider.getJwt(req);
+        String emailUserLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
+        Order order = orderService.findById(id);
+        if (order != null && emailUserLogged != null) {
+            switch (number) {
+                case 1:
+                    order.setStatusOrder(StatusOrder.PAID);
+                    orderService.save(order);
+                    break;
+                case 2:
+                    order.setStatusOrder(StatusOrder.PROCESS);
+                    orderService.save(order);
+                    break;
+                case 3:
+                    order.setStatusOrder(StatusOrder.DEVELIVERYING);
+                    orderService.save(order);
+                    break;
+                case 4:
+                    order.setStatusOrder(StatusOrder.FINISHED);
+                    orderService.save(order);
+                    break;
+            }
+        }
     }
 
     private User getUserLogger(HttpServletRequest req) {
@@ -131,7 +169,10 @@ public class OrderCrudController {
 
         // find user and add on his orders
         User user = userService.findByEmail(emailUserLogged);
+        Company company = companyService.findByCnpj(order.getCnpj());
         user.getOrders().add(order.getId());
+        company.getOrders().add(order.getId());
         userService.save(user);
+        companyService.save(company);
     }
 }

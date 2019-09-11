@@ -66,6 +66,9 @@ public class Company {
     private Set<Long> userFavorites;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> orders;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> products;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -101,6 +104,10 @@ public class Company {
 
     public Set<Long> getUserFavorites() {
         return userFavorites;
+    }
+
+    public Set<Long> getOrders() {
+        return orders;
     }
 
     public Set<Long> getProducts() {

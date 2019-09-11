@@ -28,6 +28,8 @@ public class CompanyService {
         return companyRepository.findById(longID).get();
     }
 
+    public Company findByCnpj(String cnpj) { return companyRepository.findByCnpj(cnpj); }
+
     public Iterable<Company> findAll(Pageable pageable) {
         return companyRepository.findAll(pageable);
     }
