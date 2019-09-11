@@ -1,9 +1,12 @@
 package br.com.ipet.Controllers.Company;
 
 import br.com.ipet.Models.Company;
+import br.com.ipet.Models.User;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.CompanyService;
+import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000"})
 @RestController
 @RequestMapping("/api/")
 public class PageCompanyController {
@@ -20,12 +23,15 @@ public class PageCompanyController {
     private CompanyService companyService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private JwtProvider jwtProvider;
 
     @GetMapping("/profile-company")
     public ResponseEntity<Company> getProfileCompanyLogged(HttpServletRequest req) {
         String tokenJWT = jwtProvider.getJwt(req);
-        if(tokenJWT != null) {
+        if (tokenJWT != null) {
             String emailOwner = jwtProvider.getEmailFromJwtToken(tokenJWT);
             return ResponseEntity.ok(companyService.findByOwnerEmail(emailOwner));
         } else {
@@ -47,5 +53,37 @@ public class PageCompanyController {
     @GetMapping("/companies-list/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findById(id));
+    }
+
+    @GetMapping("/companies-searched/{page}/{search}")
+    public Page<Company> getCompaniesByNameAndAddress(@PathVariable("page") int pageNumber, @PathVariable("search") String searchText, HttpServletRequest req) {
+        String tokenJWT = jwtProvider.getJwt(req);
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        if (searchText != null && tokenJWT != null) {
+            String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
+            User user = userService.findByEmail(emailUser);
+            return companyService.findByNameAndAddress(searchText, user.getAddress().getState(), user.getAddress().getCity(), pageable);
+        } else {
+            return companyService.findByName(searchText, pageable);
+        }
+    }
+
+    @GetMapping("/companies-nearby/{page}")
+    public Page<Company> getCompanyNearby(@PathVariable("page") int pageNumber, HttpServletRequest req) {
+        String tokenJWT = jwtProvider.getJwt(req);
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        if (tokenJWT != null) {
+            String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
+            User user = userService.findByEmail(emailUser);
+            return companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
+        } else {
+            return null;
+        }
+    }
+
+    @GetMapping("/companies-most-rated/{page}")
+    public Page<Company> getCompanyMostRated(@PathVariable("page") int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        return companyService.findMostRateds(pageable);
     }
 }

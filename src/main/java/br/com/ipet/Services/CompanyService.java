@@ -48,6 +48,22 @@ public class CompanyService {
         return companyRepository.existsByCnpj(cnpj);
     }
 
+    public Page<Company> findMostRateds(Pageable pageable) {
+        return companyRepository.findByRate(5 ,pageable);
+    }
+
+    public Page<Company> findByNameAndNear(String state, String city, String neighborhood, Pageable pageable) {
+        return companyRepository.findByAddress_StateAndAddress_CityAndAddress_NeighborhoodIgnoreCase(state, city, neighborhood, pageable);
+    }
+
+    public Page<Company> findByNameAndAddress(String companyName, String state, String city, Pageable pageable) {
+        return companyRepository.findByCompanyNameContainingAndAddress_StateAndAddress_CityIgnoreCase(companyName, state, city, pageable);
+    }
+
+    public Page<Company> findByName(String companyName, Pageable pageable) {
+        return companyRepository.findByCompanyNameContainingIgnoreCase(companyName, pageable);
+    }
+
     public boolean existsById(Long id) {
         return companyRepository.existsById(id);
     }

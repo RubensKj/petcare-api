@@ -13,6 +13,13 @@ public interface CompanyRepository extends PagingAndSortingRepository<Company, L
     Company findByEmail(String email);
     void deleteByCnpj(String cnpj);
     Page<Company> findByIdIn(Set<Long> ids, Pageable pageable);
-
     Company findByCnpj(String cnpj);
+
+    Page<Company> findByCompanyNameContainingAndAddress_StateAndAddress_CityIgnoreCase(String companyName, String state, String city, Pageable pageable);
+
+    Page<Company> findByCompanyNameContainingIgnoreCase(String companyName, Pageable pageable);
+
+    Page<Company> findByAddress_StateAndAddress_CityAndAddress_NeighborhoodIgnoreCase(String state, String city, String neighborhood, Pageable pageable);
+
+    Page<Company> findByRate(double rate, Pageable pageable);
 }

@@ -51,4 +51,16 @@ public class Address {
     public String getStreet() {
         return street;
     }
+
+    public String getNeighborhood() {
+        return neighborhood;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
 }
