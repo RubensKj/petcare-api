@@ -124,7 +124,7 @@ public class OrderCrudController {
                 HttpStatus.FORBIDDEN);
     }
 
-    @GetMapping("git")
+    @GetMapping("/orders-to-company/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<?> getOrderByIdInCompany(@PathVariable("id") long id, HttpServletRequest req) {
         String jwtToken = jwtProvider.getJwt(req);
