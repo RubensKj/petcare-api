@@ -51,7 +51,11 @@ public class ProductCrudController {
         if (emailOwnerLogged != null) {
             Company company = companyService.findByOwnerEmail(emailOwnerLogged);
             Pageable pageable = PageRequest.of(pageNumber, 10);
-            return ResponseEntity.ok(productService.findAllProducts(company.getProducts(), pageable));
+            if (company != null) {
+                return ResponseEntity.ok(productService.findAllProducts(company.getProducts(), pageable));
+            } else {
+                return ResponseEntity.ok(null);
+            }
         } else {
             return ResponseEntity.ok(null);
         }
@@ -59,7 +63,7 @@ public class ProductCrudController {
 
     @GetMapping("/company-products/{id}/{page}")
     public ResponseEntity<Page<Product>> listIdsToProducts(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
-        if(companyService.existsById(id)) {
+        if (companyService.existsById(id)) {
             Company company = companyService.findById(id);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(productService.findByIds(company.getProducts(), pageable));
@@ -70,7 +74,7 @@ public class ProductCrudController {
 
     @GetMapping("/order-products/{id}/{page}")
     public ResponseEntity<Page<Product>> listIdsToOrderProducts(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
-        if(orderService.existsById(id)) {
+        if (orderService.existsById(id)) {
             Order order = orderService.findById(id);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(productService.findByIds(order.getProductsIdsCart(), pageable));

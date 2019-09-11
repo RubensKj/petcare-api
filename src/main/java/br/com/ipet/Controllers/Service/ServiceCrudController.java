@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000"})
 @RestController
 @RequestMapping("/api")
 public class ServiceCrudController {
@@ -44,7 +44,11 @@ public class ServiceCrudController {
         if (emailOwnerLogged != null) {
             Company company = companyService.findByOwnerEmail(emailOwnerLogged);
             Pageable pageable = PageRequest.of(pageNumber, 10);
-            return ResponseEntity.ok(serviceService.findAllServices(company.getServices(), pageable));
+            if (company != null) {
+                return ResponseEntity.ok(serviceService.findAllServices(company.getServices(), pageable));
+            } else {
+                return ResponseEntity.ok(null);
+            }
         } else {
             return ResponseEntity.ok(null);
         }
@@ -52,7 +56,7 @@ public class ServiceCrudController {
 
     @GetMapping("/company-services/{id}/{page}")
     public ResponseEntity<Page<Service>> listIdsToServices(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
-        if(companyService.existsById(id)) {
+        if (companyService.existsById(id)) {
             Company company = companyService.findById(id);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(serviceService.findByIds(company.getServices(), pageable));
@@ -63,7 +67,7 @@ public class ServiceCrudController {
 
     @GetMapping("/order-services/{id}/{page}")
     public ResponseEntity<Page<Service>> listIdsToOrderServices(@PathVariable("id") long id, @PathVariable("page") int pageNumber) {
-        if(orderService.existsById(id)) {
+        if (orderService.existsById(id)) {
             Order order = orderService.findById(id);
             Pageable pageable = PageRequest.of(pageNumber, 10);
             return ResponseEntity.ok(serviceService.findByIds(order.getServicesIdsCart(), pageable));
