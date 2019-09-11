@@ -124,6 +124,19 @@ public class OrderCrudController {
                 HttpStatus.FORBIDDEN);
     }
 
+    @GetMapping("git")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<?> getOrderByIdInCompany(@PathVariable("id") long id, HttpServletRequest req) {
+        String jwtToken = jwtProvider.getJwt(req);
+        String emailUserLogged = jwtProvider.getEmailFromJwtToken(jwtToken);
+        Order order = orderService.findById(id);
+        if (order != null && emailUserLogged != null) {
+            return ResponseEntity.ok(order);
+        }
+        return new ResponseEntity<>("Any company connected on application",
+                HttpStatus.FORBIDDEN);
+    }
+
     @PutMapping("/orders-process/{id}/{numberProcess}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public void setProcessOfOrder(@PathVariable("id") long id, @PathVariable("numberProcess") int number, HttpServletRequest req) {
