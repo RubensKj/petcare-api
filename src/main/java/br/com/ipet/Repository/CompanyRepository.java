@@ -15,11 +15,11 @@ public interface CompanyRepository extends PagingAndSortingRepository<Company, L
     Page<Company> findByIdIn(Set<Long> ids, Pageable pageable);
     Company findByCnpj(String cnpj);
 
-    Page<Company> findByCompanyNameContainingAndAddress_StateAndAddress_CityIgnoreCase(String companyName, String state, String city, Pageable pageable);
+    Page<Company> findByCompanyNameContainingIgnoreCaseAndAddress_StateIgnoreCaseAndAddress_CityIgnoreCase(String companyName, String state, String city, Pageable pageable);
 
     Page<Company> findByCompanyNameContainingIgnoreCase(String companyName, Pageable pageable);
 
-    Page<Company> findByAddress_StateAndAddress_CityAndAddress_NeighborhoodIgnoreCase(String state, String city, String neighborhood, Pageable pageable);
+    Page<Company> findByAddress_StateIgnoreCaseAndAddress_CityIgnoreCaseAndAddress_NeighborhoodIgnoreCase(String state, String city, String neighborhood, Pageable pageable);
 
     Page<Company> findByRate(double rate, Pageable pageable);
 }

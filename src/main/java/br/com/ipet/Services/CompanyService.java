@@ -53,11 +53,11 @@ public class CompanyService {
     }
 
     public Page<Company> findByNameAndNear(String state, String city, String neighborhood, Pageable pageable) {
-        return companyRepository.findByAddress_StateAndAddress_CityAndAddress_NeighborhoodIgnoreCase(state, city, neighborhood, pageable);
+        return companyRepository.findByAddress_StateIgnoreCaseAndAddress_CityIgnoreCaseAndAddress_NeighborhoodIgnoreCase(state, city, neighborhood, pageable);
     }
 
     public Page<Company> findByNameAndAddress(String companyName, String state, String city, Pageable pageable) {
-        return companyRepository.findByCompanyNameContainingAndAddress_StateAndAddress_CityIgnoreCase(companyName, state, city, pageable);
+        return companyRepository.findByCompanyNameContainingIgnoreCaseAndAddress_StateIgnoreCaseAndAddress_CityIgnoreCase(companyName, state, city, pageable);
     }
 
     public Page<Company> findByName(String companyName, Pageable pageable) {
