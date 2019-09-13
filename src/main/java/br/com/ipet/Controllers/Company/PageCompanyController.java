@@ -62,7 +62,11 @@ public class PageCompanyController {
         if (searchText != null && tokenJWT != null) {
             String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
             User user = userService.findByEmail(emailUser);
-            return companyService.findByNameAndAddress(searchText, user.getAddress().getState(), user.getAddress().getCity(), pageable);
+            if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null) {
+                return companyService.findByNameAndAddress(searchText, user.getAddress().getState(), user.getAddress().getCity(), pageable);
+            } else {
+                return companyService.findByName(searchText, pageable);
+            }
         } else {
             return companyService.findByName(searchText, pageable);
         }
@@ -75,7 +79,11 @@ public class PageCompanyController {
         if (tokenJWT != null) {
             String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
             User user = userService.findByEmail(emailUser);
-            return companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
+            if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null && user.getAddress().getNeighborhood() != null) {
+                return companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
