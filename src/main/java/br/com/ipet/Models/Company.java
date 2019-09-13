@@ -74,6 +74,9 @@ public class Company {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> services;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> evaluations;
+
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime creationDate;
@@ -118,8 +121,16 @@ public class Company {
         return services;
     }
 
+    public Set<Long> getEvaluations() {
+        return evaluations;
+    }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
     }
 
     public void setCnpj(String cnpj) {

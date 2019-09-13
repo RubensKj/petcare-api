@@ -10,7 +10,6 @@ import java.util.Set;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Long> {
     Order findById(long id);
-    Page<Order> findProductsByIdIn(Set<Long> ids, Pageable pageable);
     Page<Order> findByIdInAndStatusOrderIsNot(Set<Long> ids, StatusOrder statusOrder, Pageable pageable);
     Page<Order> findByIdInAndStatusOrderIs(Set<Long> ids, StatusOrder statusOrder, Pageable pageable);
 }

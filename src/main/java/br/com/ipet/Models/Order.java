@@ -41,6 +41,8 @@ public class Order {
 
     private BigDecimal subTotal;
 
+    private boolean isEvaluated;
+
     @Enumerated(EnumType.STRING)
     private StatusOrder statusOrder;
 
@@ -113,5 +115,9 @@ public class Order {
 
     public void setStatusOrder(StatusOrder statusOrder) {
         this.statusOrder = statusOrder;
+    }
+
+    public void setEvaluated(boolean evaluated) {
+        isEvaluated = evaluated;
     }
 }

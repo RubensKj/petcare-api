@@ -63,7 +63,6 @@ public class OrderCrudController {
                 product.setQuantityStore(product.getQuantityStore() - 1);
                 productService.save(product);
             });
-            System.out.println(order.getPaymentMethod());
             switch (order.getPaymentMethod()) {
                 case MONEY:
                     order.setStatusOrder(StatusOrder.NOT_PAID);
