@@ -21,5 +21,5 @@ public interface CompanyRepository extends PagingAndSortingRepository<Company, L
 
     Page<Company> findByAddress_StateIgnoreCaseAndAddress_CityIgnoreCaseAndAddress_NeighborhoodIgnoreCase(String state, String city, String neighborhood, Pageable pageable);
 
-    Page<Company> findByRate(double rate, Pageable pageable);
+    Page<Company> findByRateIsLessThanEqual(double rate, Pageable pageable);
 }
