@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,7 +92,7 @@ public class PageCompanyController {
 
     @GetMapping("/companies-most-rated/{page}")
     public Page<Company> getCompanyMostRated(@PathVariable("page") int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 10);
+        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by(Sort.Direction.DESC, "rate"));
         return companyService.findMostRateds(pageable);
     }
 }

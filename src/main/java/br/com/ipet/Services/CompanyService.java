@@ -49,7 +49,7 @@ public class CompanyService {
     }
 
     public Page<Company> findMostRateds(Pageable pageable) {
-        return companyRepository.findByRateIsLessThanEqual(5 ,pageable, Sort.by(Sort.Direction.DESC, "rate"));
+        return companyRepository.findByRateIsLessThanEqual(5 ,pageable);
     }
 
     public Page<Company> findByNameAndNear(String state, String city, String neighborhood, Pageable pageable) {
