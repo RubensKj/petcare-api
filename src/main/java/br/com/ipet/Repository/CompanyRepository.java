@@ -3,6 +3,7 @@ package br.com.ipet.Repository;
 import br.com.ipet.Models.Company;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Set;
@@ -21,5 +22,5 @@ public interface CompanyRepository extends PagingAndSortingRepository<Company, L
 
     Page<Company> findByAddress_StateIgnoreCaseAndAddress_CityIgnoreCaseAndAddress_NeighborhoodIgnoreCase(String state, String city, String neighborhood, Pageable pageable);
 
-    Page<Company> findByRateIsLessThanEqual(double rate, Pageable pageable);
+    Page<Company> findByRateIsLessThanEqual(double rate, Pageable pageable, Sort sort);
 }
