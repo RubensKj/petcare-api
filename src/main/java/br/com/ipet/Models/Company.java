@@ -144,4 +144,12 @@ public class Company {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
