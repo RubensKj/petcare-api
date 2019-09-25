@@ -6,10 +6,7 @@ import br.com.ipet.Services.CompanyService;
 import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,7 +24,7 @@ public class CompanyActionsController {
     @Autowired
     private JwtProvider jwtProvider;
 
-    @GetMapping("/change-company-status")
+    @PutMapping("/change-company-status")
     public ResponseEntity<String> getProfileCompanyLogged(HttpServletRequest req) {
         String tokenJWT = jwtProvider.getJwt(req);
         if (tokenJWT != null) {
