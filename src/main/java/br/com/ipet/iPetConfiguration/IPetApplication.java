@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
 @Configuration
-@ComponentScan(basePackages = {"br.com.ipet.Security.JWT", "br.com.ipet.iPetConfiguration", "br.com.ipet.Services", "br.com.ipet.Controllers"})
+@ComponentScan(basePackages = {"br.com.ipet.Security.JWT", "br.com.ipet.iPetConfiguration", "br.com.ipet.Components", "br.com.ipet.Services", "br.com.ipet.Controllers"})
 @EnableConfigurationProperties({
         FileStorageProperties.class
 })

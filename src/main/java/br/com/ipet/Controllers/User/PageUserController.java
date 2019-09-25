@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000", "https://aw-petcare-client.herokuapp.com/", "https://aw-petcare-business.herokuapp.com/"})
 @RestController
 @RequestMapping("/api/")
 public class PageUserController {
@@ -54,7 +54,7 @@ public class PageUserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<List<Company>> getFavoritesFromUser(HttpServletRequest req) {
         User user = UserHelper.getUserLogged(req, userService, jwtProvider);
-        if(user != null) {
+        if (user != null) {
             List<Company> companies = new ArrayList<>();
             user.getFavorites().forEach(id -> {
                 Company company = companyService.findById(id);

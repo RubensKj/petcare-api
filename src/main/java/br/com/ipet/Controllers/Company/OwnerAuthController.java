@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000", "https://aw-petcare-client.herokuapp.com/", "https://aw-petcare-business.herokuapp.com/"})
 @RestController
 @RequestMapping("/api/company-auth")
 public class OwnerAuthController {

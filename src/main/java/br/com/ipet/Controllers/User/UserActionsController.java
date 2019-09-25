@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000", "https://aw-petcare-client.herokuapp.com/", "https://aw-petcare-business.herokuapp.com/"})
 @RestController
 @RequestMapping("/api/users")
 public class UserActionsController {
@@ -47,7 +47,7 @@ public class UserActionsController {
     public ResponseEntity<User> editUser(@RequestBody UserCompleteForm userJSON, HttpServletRequest req) {
         User user = UserHelper.getUserLogged(req, userService, jwtProvider);
         User userValidated = UserHelper.updateValidation(user, userJSON);
-        if(userJSON.getAddress() != null) {
+        if (userJSON.getAddress() != null) {
             userValidated.setAddress(userJSON.getAddress());
             addressService.save(userValidated.getAddress());
         }
@@ -76,7 +76,7 @@ public class UserActionsController {
     public ResponseEntity<Page<Company>> getFavoritesFromUserLogged(@PathVariable("page") int pageNumber, HttpServletRequest req) {
         User user = UserHelper.getUserLogged(req, userService, jwtProvider);
         Pageable pageable = PageRequest.of(pageNumber, 10);
-        if(!user.getFavorites().isEmpty()) {
+        if (!user.getFavorites().isEmpty()) {
             return ResponseEntity.ok(companyService.findAllByIds(user.getFavorites(), pageable));
         } else {
             return ResponseEntity.ok(null);

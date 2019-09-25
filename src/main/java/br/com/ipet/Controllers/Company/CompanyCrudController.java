@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000" })
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000", "https://aw-petcare-client.herokuapp.com/", "https://aw-petcare-business.herokuapp.com/"})
 @RestController
 @RequestMapping("/api")
 public class CompanyCrudController {
@@ -50,6 +50,7 @@ public class CompanyCrudController {
 
     @Autowired
     private JwtProvider jwtProvider;
+
 
     @PostMapping("/signup-petshop")
     public ResponseEntity<String> save(@Valid @RequestBody CompanySignUpForm companyForm) {
@@ -155,19 +156,19 @@ public class CompanyCrudController {
             Company company = companyService.findById(id);
 
             if (!emailOwnerLogged.isEmpty()) {
-                if(companyEditForm.getCnpj() != null) {
+                if (companyEditForm.getCnpj() != null) {
                     company.setCnpj(companyEditForm.getCnpj());
                 }
 
-                if(companyEditForm.getCompanyName() != null) {
+                if (companyEditForm.getCompanyName() != null) {
                     company.setCompanyName(companyEditForm.getCompanyName());
                 }
 
-                if(companyEditForm.getDescription() != null && companyEditForm.getDescription().length() > 0) {
+                if (companyEditForm.getDescription() != null && companyEditForm.getDescription().length() > 0) {
                     company.setDescription(companyEditForm.getDescription());
                 }
 
-                if(companyEditForm.getAddress() != null) {
+                if (companyEditForm.getAddress() != null) {
                     addressService.save(companyEditForm.getAddress());
                     company.setAddress(companyEditForm.getAddress());
                 }
