@@ -32,8 +32,8 @@ public class IPetApplication {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com");
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com");
+                registry.addMapping("/api/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com").allowedOrigins("aw-petcare-client.herokuapp.com").allowedOrigins("aw-petcare-business.herokuapp.com");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com").allowedOrigins("aw-petcare-client.herokuapp.com").allowedOrigins("aw-petcare-business.herokuapp.com");
             }
         };
     }
