@@ -11,8 +11,8 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         //"https://aw-petcare-client.herokuapp.com", "https://aw-petcare-business.herokuapp.com"
-        registry.addMapping("/api/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com").allowedOrigins("aw-petcare-client.herokuapp.com").allowedOrigins("aw-petcare-business.herokuapp.com");
-        registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com").allowedOrigins("aw-petcare-client.herokuapp.com").allowedOrigins("aw-petcare-business.herokuapp.com");
+        registry.addMapping("/api/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com").allowedOrigins("http://aw-petcare-client.herokuapp.com").allowedOrigins("http://aw-petcare-business.herokuapp.com");
+        registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com").allowedOrigins("http://aw-petcare-client.herokuapp.com").allowedOrigins("http://aw-petcare-business.herokuapp.com");
     }
 
     @Override
