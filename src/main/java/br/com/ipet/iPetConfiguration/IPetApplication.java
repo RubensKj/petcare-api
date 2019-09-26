@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
 @Configuration
-@ComponentScan(basePackages = {"br.com.ipet.Security.JWT", "br.com.ipet.iPetConfiguration", "br.com.ipet.Components", "br.com.ipet.Services", "br.com.ipet.Controllers"})
+@ComponentScan(basePackages = {"br.com.ipet.Security.JWT", "br.com.ipet.iPetConfiguration", "br.com.ipet.Services", "br.com.ipet.Controllers"})
 @EnableConfigurationProperties({
         FileStorageProperties.class
 })
@@ -32,8 +32,8 @@ public class IPetApplication {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api").allowedOrigins("http://localhost:3000");
-                registry.addMapping("/api/**").allowedOrigins("http://localhost:3000");
+                registry.addMapping("/api/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedOrigins("https://aw-petcare-client.herokuapp.com").allowedOrigins("https://aw-petcare-business.herokuapp.com");
             }
         };
     }
