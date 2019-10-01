@@ -43,7 +43,7 @@ public class CompanyActionsController {
 
     @GetMapping("/validate-is-open")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
-    public ResponseEntity<Boolean> checkIfCompanyIsOpen(@RequestBody String cnpj) {
+    public ResponseEntity<Boolean> checkIfCompanyIsOpen(@RequestParam String cnpj) {
         if (cnpj != null) {
             Company company = companyService.findByCnpj(cnpj);
             if (company.getStatus().equalsIgnoreCase("Aberto")) {
