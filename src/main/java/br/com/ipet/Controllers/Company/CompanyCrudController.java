@@ -81,6 +81,7 @@ public class CompanyCrudController {
         Company company = new Company(companyForm.getCnpj(), companyForm.getEmail(), companyForm.getCompanyName(), companyForm.getDescription(), "Fechado", "", 5.0);
 
         Address address = companyForm.getAddress();
+        address.setState(address.getState().toUpperCase());
         addressService.save(address);
         company.setAddress(address);
 

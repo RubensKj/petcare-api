@@ -59,7 +59,7 @@ public class PageCompanyController {
             String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
             User user = userService.findByEmail(emailUser);
             if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null) {
-                Page<Company> byNameAndAddress = companyService.findByNameAndAddress(searchText, user.getAddress().getState(), user.getAddress().getCity(), pageable);
+                Page<Company> byNameAndAddress = companyService.findByNameAndAddress(searchText, user.getAddress().getState().toUpperCase(), user.getAddress().getCity(), pageable);
                 if (!byNameAndAddress.getContent().isEmpty()) {
                     return byNameAndAddress;
                 } else {
@@ -81,11 +81,11 @@ public class PageCompanyController {
             String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
             User user = userService.findByEmail(emailUser);
             if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null && user.getAddress().getNeighborhood() != null) {
-                Page<Company> byNameAndNearby = companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
+                Page<Company> byNameAndNearby = companyService.findByNameAndNear(user.getAddress().getState().toUpperCase(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
                 if (!byNameAndNearby.getContent().isEmpty()) {
                     return byNameAndNearby;
                 } else {
-                    return companyService.findNearByCity(user.getAddress().getState(), user.getAddress().getCity(), pageable);
+                    return companyService.findNearByCity(user.getAddress().getState().toUpperCase(), user.getAddress().getCity(), pageable);
                 }
             } else {
                 return null;
