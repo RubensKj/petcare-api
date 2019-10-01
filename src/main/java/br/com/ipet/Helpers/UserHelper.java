@@ -9,19 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 
 public class UserHelper {
     public static User updateValidation(User user, UserCompleteForm userJSON) {
-        if(!userJSON.getCompleteName().isEmpty()) {
+        if(userJSON.getCompleteName() != null && !userJSON.getCompleteName().isEmpty()) {
             user.setCompleteName(userJSON.getCompleteName());
         }
 
-        if(!userJSON.getCpf().isEmpty()) {
+        if(userJSON.getCpf() != null && !userJSON.getCpf().isEmpty()) {
             user.setCpf(userJSON.getCpf());
         }
 
-        if(!userJSON.getPhoneNumber().isEmpty()) {
+        if(userJSON.getPhoneNumber() != null && !userJSON.getPhoneNumber().isEmpty()) {
             user.setPhoneNumber(userJSON.getPhoneNumber());
         }
 
-        if(!userJSON.getAvatar().isEmpty() || user.getAvatar().equals(userJSON.getEmail())) {
+        if(userJSON.getAvatar() != null && !userJSON.getAvatar().isEmpty() || user.getAvatar().equals(userJSON.getEmail())) {
             user.setAvatar(userJSON.getAvatar());
         }
 
