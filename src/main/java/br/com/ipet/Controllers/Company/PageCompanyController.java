@@ -81,9 +81,14 @@ public class PageCompanyController {
             String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
             User user = userService.findByEmail(emailUser);
             if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null && user.getAddress().getNeighborhood() != null) {
-                return companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
+                Page<Company> byNameAndNearby = companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
+                if (!byNameAndNearby.getContent().isEmpty()) {
+                    return byNameAndNearby;
+                } else {
+                    return companyService.findNearByCity(user.getAddress().getState(), user.getAddress().getCity(), pageable);
+                }
             } else {
-                return companyService.findNearByCity(user.getAddress().getState(), user.getAddress().getCity(), pageable);
+                return null;
             }
         } else {
             return null;
