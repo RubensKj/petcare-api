@@ -46,11 +46,6 @@ public class PageCompanyController {
         return ResponseEntity.ok(companyService.findAll(pageable));
     }
 
-//    @GetMapping("/companies-rate")
-//    public ResponseEntity<List<Company>> getCompaniesWithBetterRate() {
-//        return ResponseEntity.ok(companyService.findByBetterRate());
-//    }
-
     @GetMapping("/companies-list/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findById(id));
@@ -64,7 +59,12 @@ public class PageCompanyController {
             String emailUser = jwtProvider.getEmailFromJwtToken(tokenJWT);
             User user = userService.findByEmail(emailUser);
             if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null) {
-                return companyService.findByNameAndAddress(searchText, user.getAddress().getState(), user.getAddress().getCity(), pageable);
+                Page<Company> byNameAndAddress = companyService.findByNameAndAddress(searchText, user.getAddress().getState(), user.getAddress().getCity(), pageable);
+                if (!byNameAndAddress.getContent().isEmpty()) {
+                    return byNameAndAddress;
+                } else {
+                    return companyService.findByName(searchText, pageable);
+                }
             } else {
                 return companyService.findByName(searchText, pageable);
             }
@@ -83,7 +83,7 @@ public class PageCompanyController {
             if (user.getAddress() != null && user.getAddress().getState() != null && user.getAddress().getCity() != null && user.getAddress().getNeighborhood() != null) {
                 return companyService.findByNameAndNear(user.getAddress().getState(), user.getAddress().getCity(), user.getAddress().getNeighborhood(), pageable);
             } else {
-                return null;
+                return companyService.findNearByCity(user.getAddress().getState(), user.getAddress().getCity(), pageable);
             }
         } else {
             return null;

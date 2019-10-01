@@ -56,6 +56,10 @@ public class CompanyService {
         return companyRepository.findByAddress_StateIgnoreCaseAndAddress_CityIgnoreCaseAndAddress_NeighborhoodIgnoreCase(state, city, neighborhood, pageable);
     }
 
+    public Page<Company> findNearByCity(String state, String city, Pageable pageable) {
+        return companyRepository.findByAddress_StateIgnoreCaseAndAddress_CityIgnoreCase(state, city, pageable);
+    }
+
     public Page<Company> findByNameAndAddress(String companyName, String state, String city, Pageable pageable) {
         return companyRepository.findByCompanyNameContainingIgnoreCaseAndAddress_StateIgnoreCaseAndAddress_CityIgnoreCase(companyName, state, city, pageable);
     }

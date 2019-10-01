@@ -3,9 +3,9 @@ package br.com.ipet.Controllers.Company;
 import br.com.ipet.Models.Company;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.CompanyService;
-import br.com.ipet.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +19,10 @@ public class CompanyActionsController {
     private CompanyService companyService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private JwtProvider jwtProvider;
 
     @PutMapping("/change-company-status")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<String> getProfileCompanyLogged(HttpServletRequest req) {
         String tokenJWT = jwtProvider.getJwt(req);
         if (tokenJWT != null) {
@@ -40,6 +38,21 @@ public class CompanyActionsController {
             return ResponseEntity.ok("Status was changed sucessfully");
         } else {
             return ResponseEntity.ok("Something went wrong during the change of company's status");
+        }
+    }
+
+    @GetMapping("/validate-is-open")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<Boolean> checkIfCompanyIsOpen(@RequestBody String cnpj) {
+        if (cnpj != null) {
+            Company company = companyService.findByCnpj(cnpj);
+            if (company.getStatus().equalsIgnoreCase("Aberto")) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.ok(false);
+            }
+        } else {
+            return ResponseEntity.ok(false);
         }
     }
 }
