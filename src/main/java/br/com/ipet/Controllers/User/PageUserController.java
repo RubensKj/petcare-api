@@ -22,7 +22,8 @@ import java.util.List;
         "http://aw-petcare-client.herokuapp.com",
         "http://aw-petcare-business.herokuapp.com",
         "https://petcare-client.now.sh/",
-        "https://petcare-client.now.sh"
+        "https://petcare-client.now.sh",
+        "https://petcare-business.now.sh"
 })
 @RestController
 @RequestMapping("/api/")

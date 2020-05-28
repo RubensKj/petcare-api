@@ -27,7 +27,8 @@ import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
         "http://aw-petcare-client.herokuapp.com",
         "http://aw-petcare-business.herokuapp.com",
         "https://petcare-client.now.sh/",
-        "https://petcare-client.now.sh"
+        "https://petcare-client.now.sh",
+        "https://petcare-business.now.sh"
 })
 @RestController
 @RequestMapping("/api/company-auth")
