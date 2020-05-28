@@ -7,7 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000", "https://aw-petcare-client.herokuapp.com", "https://aw-petcare-business.herokuapp.com", "http://aw-petcare-client.herokuapp.com", "http://aw-petcare-business.herokuapp.com"})
+@CrossOrigin(origins = {
+        "http://localhost:3000",
+        "https://aw-petcare-client.herokuapp.com",
+        "https://aw-petcare-business.herokuapp.com",
+        "http://aw-petcare-client.herokuapp.com",
+        "http://aw-petcare-business.herokuapp.com",
+        "https://petcare-client.now.sh"
+})
 @RestController
 @RequestMapping("/api")
 public class ProductActionsController {
