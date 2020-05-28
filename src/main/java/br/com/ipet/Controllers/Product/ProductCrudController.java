@@ -29,6 +29,7 @@ import java.net.URI;
         "https://aw-petcare-business.herokuapp.com",
         "http://aw-petcare-client.herokuapp.com",
         "http://aw-petcare-business.herokuapp.com",
+        "https://petcare-client.now.sh/",
         "https://petcare-client.now.sh"
 })
 @RestController
