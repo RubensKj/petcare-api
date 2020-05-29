@@ -10,14 +10,14 @@
 [![Forks](https://img.shields.io/github/forks/RubensKj/petcare-api?color=00cc74&style=flat-square)](https://github.com/RubensKj/petcare-business/network/members)
 [![Contributors](https://img.shields.io/github/contributors/RubensKj/petcare-api?color=00cc74&style=flat-square)](https://github.com/RubensKj/petcare-business/graphs/contributors)
 
-> Delivering data to a better animal life :globe_with_meridians::whale:
+> Delivering data to a better animal life :penguin::truck:
 
 <p>PetCare API is a Rest API that helps the PetCare system and our animals</p>
 
 # 🐦 Direct Links
  * 🏗 [Dependencies](#building_construction-dependencies)
  * 🚀 [Getting Started](#rocket-getting-started)
- * 📦 [Deployment](#package-deploy)
+ * 📦 [Deploy](#package-deploy)
  * 🎉 [Want to Contribute?](#tada-want-to-contribute)
  * 📕 [License](#closed_book-license)
 
@@ -35,13 +35,15 @@ To clone this project with HTTPS run this command on Prompt.
 git clone https://github.com/RubensKj/petcare-api.git
 ```
 
-To install the dependencies maven will import all for you. If not you should reimport manually by clicking on reload button that appear on the sidebar using Intellij.
+To install the dependencies, maven will import all for you. If not you should reimport manually by clicking on reload button that appear on the sidebar using Intellij.
 
 To certify, run a maven command on maven goal
 
 ```maven
 mvn clean package
 ```
+
+By now you will be ready to run the application.
 
 In order to use the data, you should clone [PetCare Client](https://github.com/RubensKj/petcare-client)  |  [PetCare Business](https://github.com/RubensKj/petcare-business)
 
