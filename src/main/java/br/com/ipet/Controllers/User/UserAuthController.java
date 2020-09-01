@@ -29,7 +29,16 @@ import java.util.Set;
 
 import static br.com.ipet.Helpers.AuthMethods.logoutMethod;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000", "http://192.168.0.73:3000", "https://aw-petcare-client.herokuapp.com", "https://aw-petcare-business.herokuapp.com", "http://aw-petcare-client.herokuapp.com", "http://aw-petcare-business.herokuapp.com"})
+@CrossOrigin(origins = {
+        "http://localhost:3000",
+        "https://aw-petcare-client.herokuapp.com",
+        "https://aw-petcare-business.herokuapp.com",
+        "http://aw-petcare-client.herokuapp.com",
+        "http://aw-petcare-business.herokuapp.com",
+        "https://petcare-client.now.sh/",
+        "https://petcare-client.now.sh",
+        "https://petcare-business.now.sh"
+})
 @RestController
 @RequestMapping("/api/auth")
 public class UserAuthController {
