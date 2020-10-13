@@ -4,6 +4,7 @@ import br.com.ipet.Helpers.UserHelper;
 import br.com.ipet.Models.Company;
 import br.com.ipet.Models.User;
 import br.com.ipet.Payload.UserCompleteForm;
+import br.com.ipet.Payload.UserDTO;
 import br.com.ipet.Security.JWT.JwtProvider;
 import br.com.ipet.Services.AddressService;
 import br.com.ipet.Services.CompanyService;
@@ -47,8 +48,8 @@ public class UserActionsController {
 
     @GetMapping("/profile-user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('OWNER')")
-    public ResponseEntity<User> profileUser(HttpServletRequest req) {
-        return ResponseEntity.ok(UserHelper.getUserLogged(req, userService, jwtProvider));
+    public UserDTO profileUser(HttpServletRequest req) {
+        return UserDTO.of(UserHelper.getUserLogged(req, userService, jwtProvider));
     }
 
     @PostMapping("/edit")
