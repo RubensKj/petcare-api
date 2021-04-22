@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
         "https://aw-petcare-business.herokuapp.com",
         "http://aw-petcare-client.herokuapp.com",
         "http://aw-petcare-business.herokuapp.com",
-        "https://petcare-client.now.sh/",
-        "https://petcare-client.now.sh",
-        "https://petcare-business.now.sh"
+        "https://petcare-client.vercel.app/",
+        "https://petcare-client.vercel.app",
+        "https://petcare-business.vercel.app"
 })
 @RestController
 @RequestMapping("/api")
