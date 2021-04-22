@@ -92,7 +92,6 @@ public class UserAuthController {
         return null;
     }
 
-
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserCompleteForm signUpRequest) {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
